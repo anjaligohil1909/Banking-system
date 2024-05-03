@@ -11,9 +11,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import Sidebar from "../Sidebar/Sidebar";
 import CssBaseline from "@mui/material/CssBaseline";
+import Checkings from "../Dashboard/Checkings";
 
 const pages = ["Checkings", "Saving", "Loan"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -105,7 +105,6 @@ function Navbar() {
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Typography
               variant="h5"
               noWrap
@@ -184,6 +183,7 @@ function Navbar() {
         </Container>
       </AppBar>
       <Sidebar />
+      <Checkings />
     </Box>
   );
 }
