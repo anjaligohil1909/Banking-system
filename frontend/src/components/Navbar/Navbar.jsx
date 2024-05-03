@@ -14,11 +14,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Sidebar from "../Sidebar/Sidebar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Checkings from "../Dashboard/Checkings";
+import { Outlet } from "react-router-dom";
 
 const pages = ["Checkings", "Saving", "Loan"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-function Navbar() {
+function Navbar(props) {
+  const sideBarList = props.sideBarList;
+  
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -182,8 +185,15 @@ function Navbar() {
           </Toolbar>
         </Container>
       </AppBar>
-      <Sidebar />
-      <Checkings />
+      <Sidebar sideBarList= {sideBarList}/>
+      
+     <Box
+        component="main"
+        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+      >
+        <Toolbar />
+        <Outlet />
+      </Box>
     </Box>
   );
 }
