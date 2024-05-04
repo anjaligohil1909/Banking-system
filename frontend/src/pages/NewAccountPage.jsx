@@ -1,39 +1,173 @@
 import * as React from "react";
-import {Typography} from "@mui/material";
+import {
+  Typography,
+  Box,
+  Divider,
+  Link,
+  Breadcrumbs,
+  TextField,
+  FormControl,
+  MenuItem,
+  InputLabel,
+  Select,
+} from "@mui/material";
 
+import Button from "@mui/material/Button";
 
 export default function NewAccountPage() {
-    return (
-        //  <Navbar sideBarList = {employeeSideBarList} /> 
-        //  <Sidebar sideBarList = {employeeSideBarList} />
-        <>
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-        </>
-    );
+  const [salutation, setSalutation] = React.useState("");
+  const handleSalutationChange = (event) => {
+    setSalutation(event.target.value);
+  };
+
+  return (
+    <>
+      <Breadcrumbs aria-label="breadcrumb" mb={2}>
+        <Link underline="hover" color="inherit" href="/">
+          Home
+        </Link>
+        <Typography color="text.primary">New Account</Typography>
+      </Breadcrumbs>
+      <Divider />
+      <Typography variant="h4" gutterBottom mt={2}>
+        Add New Customer
+      </Typography>
+      <Box
+        component="form"
+        sx={{
+          minWidth: 750,
+          "& .MuiTextField-root": { m: 1, width: "50ch" },
+          width: "100%",
+          display: "block",
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <FormControl
+          style={{ width: "250px", margin: "8px", display: "block" }}
+        >
+          <InputLabel id="demo-simple-select-label">Salutation</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={salutation}
+            label="Salutation"
+            fullWidth
+            onChange={handleSalutationChange}
+          >
+            <MenuItem value={"Mr"}>Mr</MenuItem>
+            <MenuItem value={"Mrs"}>Mrs</MenuItem>
+            <MenuItem value={"Ms"}>Ms</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ display: "inline" }}>
+          <TextField
+            id="outlined-basic"
+            label="First Name"
+            variant="outlined"
+            required
+          />
+          <TextField
+            required
+            id="outlined-basic"
+            label="Last Name"
+            variant="outlined"
+          />
+        </FormControl>
+        <FormControl sx={{ display: "block" }}>
+          <TextField
+            name="DOB"
+            label="Date Of Birth"
+            InputLabelProps={{ shrink: true, required: true }}
+            type="date"
+          />
+        </FormControl>
+        <FormControl sx={{ display: "inline", width: "100%" }}>
+          <TextField type="text" label="Street Address"></TextField>
+          <TextField type="text" label="Apt No./Unit"></TextField>
+        </FormControl>
+        <FormControl sx={{ display: "block", width: "100%" }}>
+          <TextField type="text" label="City"></TextField>
+          <TextField type="text" label="State"></TextField>
+          <TextField type="text" label="ZipCode"></TextField>
+        </FormControl>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "1rem",
+            margin: "10px",
+          }}
+        >
+          <Button variant="contained" color="success">
+            Submit
+          </Button>
+          <Button variant="outlined" color="error">
+            Reset
+          </Button>
+        </div>
+      </Box>
+    </>
+  );
+
+  //     const [age, setAge] = React.useState('');
+
+  //     const handleChange = (event) => {
+  //       setAge(event.target.value);
+  //     };
+
+  //     const [salutation, setSalutation] = React.useState('');
+  //     const handleSalutationChange = (event) => {
+  //         setSalutation(event.target.value);
+  //       };
+
+  //     return (
+  //         <>
+  //         <Breadcrumbs aria-label="breadcrumb" mb={2}>
+  //   <Link underline="hover" color="inherit" href="/">
+  //     Home
+  //   </Link>
+
+  //   <Typography color="text.primary">New Account</Typography>
+  // </Breadcrumbs>
+  // <Divider/>
+  // <Typography variant="h4" gutterBottom mt={2}>
+  //         Add New Customer
+  //       </Typography>
+
+  //         <Box
+  //         component='form'
+  //       sx={{
+  //         minWidth: 750,
+  //         '& .MuiTextField-root': { m: 1, width: '50ch' }, width:'100%',
+  //         // '& .MuiOutlinedInput-root': { m: 1, width: '50ch' },
+  //         // '& .MuiInputLabel-root': { m: 1, width: '50ch' }
+
+  //       }}
+  //       noValidate
+  //       autoComplete="off"
+  //     >
+  //         {/* <FormControl fullWidth={true} style={{display:"inline"}} sx={{ minWidth: 250}}> */}
+  //         <InputLabel id="demo-simple-select-autowidth-label">Age</InputLabel>
+  //         <Select
+  //           labelId="demo-simple-select-autowidth-label"
+  //           id="demo-simple-select-autowidth"
+  //           value={age}
+  //           onChange={handleChange}
+  //           sx={{width:250}}
+  //           label="Age"
+  //         >
+  //           <MenuItem value="">
+  //             <em>None</em>
+  //           </MenuItem>
+  //           <MenuItem value={10}>Twenty</MenuItem>
+  //           <MenuItem value={21}>Twenty one</MenuItem>
+  //           <MenuItem value={22}>Twenty one and a half</MenuItem>
+  //         </Select>
+  //          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+  //       <TextField id="filled-basic" label="Filled" variant="filled" />
+  //       {/* </FormControl> */}
+  //         </Box>
+  //         </>
+  //     );
 }
