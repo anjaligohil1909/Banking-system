@@ -1,0 +1,17 @@
+.cardbtn-header {
+    display: flex;
+    justify-content: center;
+    padding: 15px 0px;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+    align-items: center;
+    justify-content: center;
+    padding-top: 3rem;
+}
