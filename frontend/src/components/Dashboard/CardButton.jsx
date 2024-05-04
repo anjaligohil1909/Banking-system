@@ -5,6 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import AdbIcon from "@mui/icons-material/Adb";
 import "./dashboard.css";
+import { useNavigate } from "react-router-dom";
 
 import {
   Avatar,
@@ -15,6 +16,8 @@ import {
 } from "@mui/material";
 
 export default function CardButton({accountDetails}) {
+  const navigate = useNavigate();
+
   return (
     <Card sx={{  backgroundColor: "#F0F8FF"}}>
       <CardActionArea sx={{px:5}}>
@@ -34,7 +37,7 @@ export default function CardButton({accountDetails}) {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{float: "right", marginRight: 1}}>
-        <Button size="small" color="primary" >
+        <Button size="small" color="primary" onClick={() => navigate(`/customer/${accountDetails[0].toLowerCase()}`)}>
           View Details
         </Button>
       </CardActions>
