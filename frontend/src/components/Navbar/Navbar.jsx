@@ -8,20 +8,19 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Sidebar from "../Sidebar/Sidebar";
 import CssBaseline from "@mui/material/CssBaseline";
-import Checkings from "../Dashboard/Checkings";
 import { Outlet } from "react-router-dom";
 
 const pages = ["Checkings", "Saving", "Loan"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Navbar(props) {
+  const user = "customer"
   const sideBarList = props.sideBarList;
-  
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -59,7 +58,7 @@ function Navbar(props) {
               variant="h4"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href={user === "customer"? "/customer": "/employee"}
               sx={{
                 display: { xs: "none", md: "flex" },
                 fontFamily: "monospace",
@@ -185,11 +184,10 @@ function Navbar(props) {
           </Toolbar>
         </Container>
       </AppBar>
-      <Sidebar sideBarList= {sideBarList}/>
-      
-     <Box
+      <Sidebar sideBarList={sideBarList} />
+      <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
       >
         <Toolbar />
         <Outlet />
