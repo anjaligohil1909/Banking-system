@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { TextField, Button, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -21,6 +24,7 @@ const Login = () => {
 
     if (email && password) {
       console.log(email, password);
+      navigate("/customer");
     }
   };
 

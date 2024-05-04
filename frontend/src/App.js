@@ -10,16 +10,17 @@ import Loans from "./components/Dashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
 
 const employeeSideBarList = {
-  "New Account": "new-account",
   "Customer List": "/",
+  "New Account": "new-account",
   Loan: "/",
   "View Request": "/",
 };
 
 const customersSideBarList = {
+  Dashboard: "/customer",
   Checkings: "/customer/checkings",
-  Saving: "/customer/savings",
-  Loan: "/customer/loans",
+  Savings: "/customer/savings",
+  Loans: "/customer/loans",
   "Create Request": "/customer/create-request",
 };
 
