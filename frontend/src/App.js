@@ -8,25 +8,25 @@ import Checkings from "./components/Dashboard/Checkings";
 import Savings from "./components/Dashboard/Savings";
 import Loans from "./components/Dashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
+import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
 
 const employeeSideBarList = {
-  "Customer List": "/",
   "New Account": "new-account",
+  "Customer List": "/",
   Loan: "/",
   "View Request": "/",
 };
 
 const customersSideBarList = {
-  Dashboard: "/customer",
-  Checkings: "/customer/checkings",
-  Savings: "/customer/savings",
-  Loans: "/customer/loans",
-  "Create Request": "/customer/create-request",
+  Checkings: "checkings",
+  Saving: "savings",
+  Loan: "loans",
+  "Create Request": "create-request",
 };
 
 function App() {
   return (
-    <div classname="App">
+    <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
@@ -43,6 +43,7 @@ function App() {
           path="employee"
           element={<Navbar sideBarList={employeeSideBarList} />}
         >
+          <Route index element={<EmployeeDashboard />} />
           <Route path="new-account" element={<NewAccountPage />} />
         </Route>
       </Routes>
