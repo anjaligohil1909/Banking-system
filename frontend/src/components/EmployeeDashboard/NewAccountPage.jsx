@@ -13,11 +13,16 @@ import {
 } from "@mui/material";
 
 import Button from "@mui/material/Button";
+import { useState } from "react";
 
 export default function NewAccountPage() {
-  const [salutation, setSalutation] = React.useState("");
+  const [salutation, setSalutation] = useState("");
   const handleSalutationChange = (event) => {
     setSalutation(event.target.value);
+  };
+  const [accountType, setAccountType] = useState("");
+  const handleAccountTypeChange = (event) => {
+    setAccountType(event.target.value);
   };
 
   return (
@@ -46,6 +51,23 @@ export default function NewAccountPage() {
         <FormControl
           style={{ width: "250px", margin: "8px", display: "block" }}
         >
+          <InputLabel id="type-of-account-label">Account Type</InputLabel>
+          <Select
+            labelId="type-of-account-label"
+            id="type-of-account"
+            value={accountType}
+            label="Accout Type"
+            fullWidth
+            onChange={handleAccountTypeChange}
+            required
+          >
+            <MenuItem value={"Checkings"}>Checkings</MenuItem>
+            <MenuItem value={"Savings"}>Savings</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl
+          style={{ width: "250px", margin: "8px", display: "block" }}
+        >
           <InputLabel id="demo-simple-select-label">Salutation</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -54,6 +76,7 @@ export default function NewAccountPage() {
             label="Salutation"
             fullWidth
             onChange={handleSalutationChange}
+            required
           >
             <MenuItem value={"Mr"}>Mr</MenuItem>
             <MenuItem value={"Mrs"}>Mrs</MenuItem>
@@ -82,14 +105,22 @@ export default function NewAccountPage() {
             type="date"
           />
         </FormControl>
+        <FormControl sx={{ display: "block", width: "100%" }}>
+          <TextField required type="text" label="Email"></TextField>
+          <TextField required type="text" label="Password"></TextField>
+        </FormControl>
+        <FormControl sx={{ display: "block", width: "100%" }}>
+          <TextField required type="text" label="Social Security Number"></TextField>
+          <TextField required type="text" label="Phone Number"></TextField>
+        </FormControl>
         <FormControl sx={{ display: "inline", width: "100%" }}>
-          <TextField type="text" label="Street Address"></TextField>
+          <TextField required type="text" label="Street Address"></TextField>
           <TextField type="text" label="Apt No./Unit"></TextField>
         </FormControl>
         <FormControl sx={{ display: "block", width: "100%" }}>
-          <TextField type="text" label="City"></TextField>
-          <TextField type="text" label="State"></TextField>
-          <TextField type="text" label="ZipCode"></TextField>
+          <TextField required type="text" label="City"></TextField>
+          <TextField required type="text" label="State"></TextField>
+          <TextField required type="text" label="ZipCode"></TextField>
         </FormControl>
         <div
           style={{

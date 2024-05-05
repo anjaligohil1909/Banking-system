@@ -8,6 +8,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const navigate = useNavigate();
+  const user = "employee"
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,7 +25,7 @@ const Login = () => {
 
     if (email && password) {
       console.log(email, password);
-      navigate("/customer");
+      navigate(`/${user}`);
     }
   };
 

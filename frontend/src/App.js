@@ -1,16 +1,19 @@
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
-import CustomerDashboard from "./components/Dashboard/CustomerDashboard";
-import NewAccountPage from "./pages/NewAccountPage";
+import CustomerDashboard from "./components/CustomerDashboard/CustomerDashboard";
+import NewAccountPage from "./components/EmployeeDashboard/NewAccountPage";
 import Login from "./components/Login/Login";
-import Checkings from "./components/Dashboard/Checkings";
-import Savings from "./components/Dashboard/Savings";
-import Loans from "./components/Dashboard/Loans";
+import Checkings from "./components/CustomerDashboard/Checkings";
+import Savings from "./components/CustomerDashboard/Savings";
+import Loans from "./components/CustomerDashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
+import CustomerList from "./components/EmployeeDashboard/CustomerList";
 import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
 
 const employeeSideBarList = {
+  Dashboard: "",
+  "Customer List": "customer-list",
   "New Account": "new-account",
   "Customer List": "/",
   Loan: "/",
@@ -18,9 +21,10 @@ const employeeSideBarList = {
 };
 
 const customersSideBarList = {
+  Dashboard: "",
   Checkings: "checkings",
-  Saving: "savings",
-  Loan: "loans",
+  Savings: "savings",
+  Loans: "loans",
   "Create Request": "create-request",
 };
 
@@ -45,6 +49,7 @@ function App() {
         >
           <Route index element={<EmployeeDashboard />} />
           <Route path="new-account" element={<NewAccountPage />} />
+          <Route path="customer-list" element={<CustomerList />} />
         </Route>
       </Routes>
     </div>

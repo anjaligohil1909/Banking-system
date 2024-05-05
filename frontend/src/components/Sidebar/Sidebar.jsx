@@ -14,9 +14,10 @@ const drawerWidth = 260;
 
 export default function Sidebar({ sideBarList }) {
   const location = useLocation();
-  const pathnameParts = location.pathname.split("/");
-  const lastName = pathnameParts[pathnameParts.length - 1];
-  console.log(location.pathname === sideBarList["Checkings"]);
+  const user = "employee";
+  const pathAfterEmployeeArray  = location.pathname.split(`${user}/`)[1];
+  // const lastName = pathAfterEmployeeArray.length > 1 ? pathAfterEmployeeArray[1] : "";
+  const lastName = pathAfterEmployeeArray? pathAfterEmployeeArray: ""
   return (
     <Drawer
       PaperProps={{
@@ -27,7 +28,6 @@ export default function Sidebar({ sideBarList }) {
       }}
       sx={{
         width: drawerWidth,
-        backgroundColor: "#57068C",
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: drawerWidth,
@@ -48,7 +48,7 @@ export default function Sidebar({ sideBarList }) {
                   disablePadding
                   sx={{
                     my: 2,
-                    ...(location.pathname === sideBarList[key] && {
+                    ...(lastName === sideBarList[key] && {
                       "& .MuiButtonBase-root": {
                         backgroundColor: "rgba(0, 0, 0, 0.04)",
                       },

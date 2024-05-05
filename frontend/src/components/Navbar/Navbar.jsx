@@ -18,7 +18,7 @@ const pages = ["Checkings", "Saving", "Loan"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Navbar(props) {
-  const user = "customer"
+  const user = "employee";
   const sideBarList = props.sideBarList;
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
