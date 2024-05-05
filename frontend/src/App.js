@@ -10,15 +10,17 @@ import Loans from "./components/CustomerDashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
 import CustomerList from "./components/EmployeeDashboard/CustomerList";
 import LoanRequests from "./components/EmployeeDashboard/LoanRequests";
-import AllRequests from "./components/EmployeeDashboard/AllRequests";
+import TransactionRequests from "./components/EmployeeDashboard/TransactionRequests";
 import EmployeeDashboard from "./components/EmployeeDashboard/EmployeeDashboard";
+import ProfileEditRequests from "./components/EmployeeDashboard/ProfileEditRequests";
 
 const employeeSideBarList = {
   Dashboard: "",
   "Customer List": "customer-list",
   "New Account": "new-account",
-  "Loan": "loan-requests",
-  "View Request": "all-requests",
+  "Loan Requests": "loan-requests",
+  "Transaction Requests": "transaction-requests",
+  "Profile Edit Requests": "profile-edit-requests",
 };
 
 const customersSideBarList = {
@@ -52,7 +54,8 @@ function App() {
           <Route path="new-account" element={<NewAccountPage />} />
           <Route path="customer-list" element={<CustomerList />} />
           <Route path="loan-requests" element={<LoanRequests />} />
-          <Route path="all-requests" element={<AllRequests />} />
+          <Route path="transaction-requests" element={<TransactionRequests />} />
+          <Route path="profile-edit-requests" element={<ProfileEditRequests />} />
         </Route>
       </Routes>
     </div>

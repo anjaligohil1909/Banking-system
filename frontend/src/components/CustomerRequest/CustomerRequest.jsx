@@ -40,7 +40,7 @@ export default function CustomerRequest() {
 	return (
 		<>
 			<Breadcrumbs aria-label="breadcrumb" mb={2}>
-				<Link underline="hover" color="inherit" href="/">
+				<Link underline="hover" color="inherit" href="/customer">
 					Home
 				</Link>
 				<Typography color="text.primary">New request</Typography>
