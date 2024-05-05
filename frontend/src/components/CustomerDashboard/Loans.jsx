@@ -1,42 +1,97 @@
 import React from "react";
-import CardButton from "./CardButton";
-import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Typography,
+  Breadcrumbs,
+  Link,
+  Chip,
+  Stack,
+} from "@mui/material";
+import AttachMoneyOutlined from "@mui/icons-material/AttachMoneyOutlined";
+import NoteAddOutlined from "@mui/icons-material/NoteAddOutlined";
+
+import { Link as RouterLink } from "react-router-dom";
+import AccountTile from "./AccountTile";
+import Dummy from "./Dummy";
 
 function Loan(props) {
-	const { accountNum, loanAmt, intRate, term, amtDisbursed, intAcc, monthlyPay } = props;
-
-	return (
-		<Box className="">
-			<h2>Loan Details</h2>
-			<Card
-				sx={{
-					backgroundColor: "#F0F8FF",
-					width: "fit-content",
-					padding: "1rem",
-				}}
-			>
-				<CardContent>
-					<Typography gutterBottom variant="h6">Account Number: 578578534</Typography>
-          {/* <Typography gutterBottom variant="h6">Account Number: {accountNum} </Typography> */}
-          <Divider />
-					<Typography gutterBottom variant="h6">Amount Approved: $35,000.00</Typography>
-          <Typography gutterBottom variant="h6">Interest Rate: 6.8%</Typography>
-          <Typography gutterBottom variant="h6">Term: 5 years</Typography>
-          {/* <Typography gutterBottom variant="h6">Amount Approved: {loanAmt} </Typography> */}
-          {/* <Typography gutterBottom variant="h6">Interest Rate: {intRate} </Typography> */}
-          {/* <Typography gutterBottom variant="h6">Term: {term} </Typography> */}
-          <Divider />
-          <Typography gutterBottom variant="h6">Amount Disbursed: $15,000.00</Typography>
-          <Typography gutterBottom variant="h6">Interest Accumulated: $2,000.00</Typography>
-          {/* <Typography gutterBottom variant="h6">Amount Disbursed: {amtDisbursed} </Typography> */}
-          {/* <Typography gutterBottom variant="h6">Interest Accumulated: {intAcc} </Typography> */}
-          <Divider />
-          <Typography gutterBottom variant="h6">Monthly Payment: $150.00</Typography>
-					{/* <Typography gutterBottom variant="h6">Monthly Payment: {monthlyPay} </Typography> */}
-				</CardContent>
-			</Card>
-		</Box>
-	);
+  const accountDetails = [
+    {
+      accountType: "Personal",
+      accountNumber: 123456,
+      principalAmt: 100000,
+      intRate: 0.065,
+      term: "5 years",
+      maturityDate: "12/31/2029",
+      nextPaymentDate: "5/31/2025",
+      installmentAmt: 500,
+      loanStartDate: "1/1/2024",
+      loanApprovedBy: "User ABC",
+    },
+    {
+      accountType: "Home",
+      accountNumber: 13579,
+      principalAmt: 1000000,
+      intRate: 0.075,
+      term: "30 years",
+      maturityDate: "12/31/2054",
+      nextPaymentDate: "5/31/2025",
+      installmentAmt: 2500,
+      loanStartDate: "1/1/2024",
+      loanApprovedBy: "User XYZ",
+    },
+  ];
+  return (
+    <>
+      <Breadcrumbs aria-label="breadcrumb" mb={2}>
+        <Link
+          underline="hover"
+          color="inherit"
+          component={RouterLink}
+          to="/customer"
+        >
+          Dashboard
+        </Link>
+        <Typography color="text.primary">Loans</Typography>
+      </Breadcrumbs>
+      <Divider />
+      <Box>
+        <Typography variant="h4" gutterBottom mt={2}>
+          Loan Details
+        </Typography>
+        <Stack direction="row" spacing={1} pb={2}>
+          <Chip
+            color="success"
+            icon={<AttachMoneyOutlined />}
+            label="Make Payment"
+            component="a"
+            clickable
+            href="/customer/create-request"
+          />
+          <Chip
+            color="primary"
+            icon={<NoteAddOutlined />}
+            label="New Loan"
+            component="a"
+            clickable
+            href="/customer/create-request"
+          />
+        </Stack>
+        <Stack direction="row" spacing={3}>
+          {accountDetails.map((item, idx) => {
+            return <AccountTile key={idx} index={idx} accountDetails={item} />;
+          })}
+        </Stack>
+        {/* DO NOT DELETE FOLLOWING */}
+        {/* <Stack direction="row" spacing={3}>
+          {accountDetails.map((item, idx) => {
+            return <Dummy key={idx} index={idx}></Dummy>;
+          })}
+        </Stack> */}
+      </Box>
+    </>
+  );
 }
 
 export default Loan;
