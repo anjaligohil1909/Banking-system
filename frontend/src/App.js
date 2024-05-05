@@ -9,11 +9,13 @@ import Savings from "./components/CustomerDashboard/Savings";
 import Loans from "./components/CustomerDashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
 import CustomerList from "./components/EmployeeDashboard/CustomerList";
+import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
 
 const employeeSideBarList = {
   Dashboard: "",
   "Customer List": "customer-list",
   "New Account": "new-account",
+  "Customer List": "/",
   Loan: "/",
   "View Request": "/",
 };
@@ -28,7 +30,7 @@ const customersSideBarList = {
 
 function App() {
   return (
-    <div classname="App">
+    <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
@@ -45,6 +47,7 @@ function App() {
           path="employee"
           element={<Navbar sideBarList={employeeSideBarList} />}
         >
+          <Route index element={<EmployeeDashboard />} />
           <Route path="new-account" element={<NewAccountPage />} />
           <Route path="customer-list" element={<CustomerList />} />
         </Route>
