@@ -9,21 +9,23 @@ import Savings from "./components/CustomerDashboard/Savings";
 import Loans from "./components/CustomerDashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
 import CustomerList from "./components/EmployeeDashboard/CustomerList";
+import LoanRequests from "./components/EmployeeDashboard/LoanRequests";
+import AllRequests from "./components/EmployeeDashboard/AllRequests";
 import EmployeeDashboard from "./components/EmployeeDashboard/EmployeeDashboard";
 
 const employeeSideBarList = {
   Dashboard: "",
   "Customer List": "customer-list",
   "New Account": "new-account",
-  Loan: "/",
-  "View Request": "/",
+  "Loan": "loan-requests",
+  "View Request": "all-requests",
 };
 
 const customersSideBarList = {
   Dashboard: "",
   Checkings: "checkings",
   Savings: "savings",
-  Loans: "loans",
+  Loan: "loan",
   "Create Request": "create-request",
 };
 
@@ -39,7 +41,7 @@ function App() {
           <Route index element={<CustomerDashboard />} />
           <Route path="checkings" element={<Checkings />} />
           <Route path="savings" element={<Savings />} />
-          <Route path="loans" element={<Loans />} />
+          <Route path="loan" element={<Loans />} />
           <Route path="create-request" element={<CustomerRequest />} />
         </Route>
         <Route
@@ -49,6 +51,8 @@ function App() {
           <Route index element={<EmployeeDashboard />} />
           <Route path="new-account" element={<NewAccountPage />} />
           <Route path="customer-list" element={<CustomerList />} />
+          <Route path="loan-requests" element={<LoanRequests />} />
+          <Route path="all-requests" element={<AllRequests />} />
         </Route>
       </Routes>
     </div>
