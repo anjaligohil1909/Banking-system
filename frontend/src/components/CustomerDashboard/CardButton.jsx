@@ -8,39 +8,59 @@ import "./dashboard.css";
 import { useNavigate } from "react-router-dom";
 
 import {
-  Avatar,
-  Button,
-  CardActionArea,
-  CardActions,
-  Icon,
+	Avatar,
+	Button,
+	CardActionArea,
+	CardActions,
+	Icon,
 } from "@mui/material";
 
-export default function CardButton({accountDetails}) {
-  const navigate = useNavigate();
+export default function CardButton({ accountDetails }) {
+	const navigate = useNavigate();
 
-  return (
-    <Card sx={{  backgroundColor: "#F0F8FF"}}>
-      <CardActionArea sx={{px:5}}>
-        <div className="cardbtn-header">
-          <Avatar
-            alt="Anjali Gohil"
-            src="/static/images/avatar/2.jpg"
-            sx={{ backgroundColor: "black", color: "white" }}
-          />
-          <Typography variant="h6"> Anjali Gohil</Typography>
-          </div>
+	return (
+		<Card sx={{ backgroundColor: "#F0F8FF", width: "400px" }}>
+			<CardActionArea sx={{ px: 5 }}>
+				{/* <div className="cardbtn-header">
+					<Avatar
+						alt="Anjali Gohil"
+						src="/static/images/avatar/2.jpg"
+						sx={{ backgroundColor: "black", color: "white" }}
+					/>
+					<Typography variant="h6"> Anjali Gohil</Typography>
+				</div> */}
 
-        <CardContent>
-          <Typography gutterBottom variant="h6">Account Type: {accountDetails[0]} </Typography>
-          <Typography gutterBottom variant="h6">Account Number: {accountDetails[1]} </Typography>
-          <Typography gutterBottom variant="h6">Balance: {accountDetails[2]} </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions sx={{float: "right", marginRight: 1}}>
-        <Button size="small" color="primary" onClick={() => navigate(`/customer/${accountDetails[0].toLowerCase()}`)}>
-          View Details
-        </Button>
-      </CardActions>
-    </Card>
-  );
+				<CardContent>
+					<Typography gutterBottom variant="h6">
+						Account Type: {accountDetails[0]}{" "}
+					</Typography>
+					<Typography gutterBottom variant="h6">
+						Account Number: {accountDetails[1]}{" "}
+					</Typography>
+					{accountDetails[0] == "Loan" ? (
+						<>
+							<Typography gutterBottom variant="h6">
+								Monthly installment: {accountDetails[2]}{" "}
+							</Typography>
+						</>
+					) : (
+						<Typography gutterBottom variant="h6">
+							Balance: {accountDetails[2]}{" "}
+						</Typography>
+					)}
+				</CardContent>
+			</CardActionArea>
+			<CardActions sx={{ float: "right", marginRight: 1 }}>
+				<Button
+					size="small"
+					color="primary"
+					onClick={() =>
+						navigate(`/customer/${accountDetails[0].toLowerCase()}`)
+					}
+				>
+					View Details
+				</Button>
+			</CardActions>
+		</Card>
+	);
 }
