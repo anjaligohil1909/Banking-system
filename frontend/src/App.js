@@ -1,27 +1,29 @@
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Route, Routes } from "react-router-dom";
-import CustomerDashboard from "./components/Dashboard/CustomerDashboard";
-import NewAccountPage from "./pages/NewAccountPage";
+import CustomerDashboard from "./components/CustomerDashboard/CustomerDashboard";
+import NewAccountPage from "./components/EmployeeDashboard/NewAccountPage";
 import Login from "./components/Login/Login";
-import Checkings from "./components/Dashboard/Checkings";
-import Savings from "./components/Dashboard/Savings";
-import Loans from "./components/Dashboard/Loans";
+import Checkings from "./components/CustomerDashboard/Checkings";
+import Savings from "./components/CustomerDashboard/Savings";
+import Loans from "./components/CustomerDashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
+import CustomerList from "./components/EmployeeDashboard/CustomerList";
 
 const employeeSideBarList = {
-  "Customer List": "/",
+  Dashboard: "",
+  "Customer List": "customer-list",
   "New Account": "new-account",
   Loan: "/",
   "View Request": "/",
 };
 
 const customersSideBarList = {
-  Dashboard: "/customer",
-  Checkings: "/customer/checkings",
-  Savings: "/customer/savings",
-  Loans: "/customer/loans",
-  "Create Request": "/customer/create-request",
+  Dashboard: "",
+  Checkings: "checkings",
+  Savings: "savings",
+  Loans: "loans",
+  "Create Request": "create-request",
 };
 
 function App() {
@@ -44,6 +46,7 @@ function App() {
           element={<Navbar sideBarList={employeeSideBarList} />}
         >
           <Route path="new-account" element={<NewAccountPage />} />
+          <Route path="customer-list" element={<CustomerList />} />
         </Route>
       </Routes>
     </div>
