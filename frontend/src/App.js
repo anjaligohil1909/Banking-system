@@ -9,13 +9,12 @@ import Savings from "./components/CustomerDashboard/Savings";
 import Loans from "./components/CustomerDashboard/Loans";
 import CustomerRequest from "./components/CustomerRequest/CustomerRequest";
 import CustomerList from "./components/EmployeeDashboard/CustomerList";
-import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard/EmployeeDashboard";
 
 const employeeSideBarList = {
   Dashboard: "",
   "Customer List": "customer-list",
   "New Account": "new-account",
-  "Customer List": "/",
   Loan: "/",
   "View Request": "/",
 };

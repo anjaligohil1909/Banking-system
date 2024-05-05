@@ -7,7 +7,7 @@ import {
   Box,
   Grid,
 } from "@mui/material";
-import DashboardTile from "../Dashboard/DashboardTile";
+import DashboardTile from "./DashboardTile";
 import { LineChart } from "@mui/x-charts/LineChart";
 import { PieChart } from "@mui/x-charts/PieChart";
 
