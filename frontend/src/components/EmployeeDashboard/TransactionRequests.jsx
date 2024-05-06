@@ -53,18 +53,17 @@ function createData(fromname, fromaccno, toname, toaccno, amount, action) {
 }
 
 const rows = [
-  createData("Anjali", 3451234325, "John", 1234567890, 30),
-  createData("John", "Doe", "john@example.com", 1234567890, 2),
-  createData("Jane", "Smith", "jane@example.com", 9876543210, 3),
-  createData("Alice", "Johnson", "alice@example.com", 5551234567, 1),
-  createData("Bob", "Brown", "bob@example.com", 9998887777, 2),
-  createData("Emily", "Davis", "emily@example.com", 1112223333, 1),
-  createData("Michael", "Wilson", "michael@example.com", 4445556666, 3),
-  createData("Sarah", "Anderson", "sarah@example.com", 7778889999, 2),
-  createData("David", "Martinez", "david@example.com", 2223334444, 1),
-  createData("Olivia", "Taylor", "olivia@example.com", 8889990000, 2),
-  createData("James", "Lee", "james@example.com", 6667778888, 3),
-  createData("Sophia", "Brown", "sophia@example.com", 3334445555, 1),
+  createData("Tanay", 3451234325, "Ethan", 1234567890, 50),
+  createData("Anjali", 3451234325, "Ethan", 1234567890, 30),
+  createData("Emma", 5647890321, "Michael", 9087654321, 25),
+  createData("Sophia", 1239874560, "Matthew", 2345678901, 35),
+  createData("Olivia", 6785432190, "Ethan", 7890123456, 28),
+  createData("Isabella", 9876543210, "David", 6543210987, 32),
+  createData("Ava", 1234509876, "James", 8901234567, 29),
+  createData("Mia", 8765432109, "Benjamin", 4321098765, 31),
+  createData("Charlotte", 3456789012, "Logan", 2109876543, 27),
+  createData("Amelia", 5432109876, "Lucas", 8765432109, 33),
+  createData("Harper", 8901234567, "Alexander", 5678901234, 26)
 ];
 
 export default function TransactionRequests() {
@@ -82,7 +81,7 @@ export default function TransactionRequests() {
 
   return (
     <>
-      <h2 style={{ marginBottom: "2rem" }}>Pending List of Customers</h2>
+      <h2 style={{ marginBottom: "2rem" }}>Pending Transactions</h2>
       <SearchBar />
       <TableComponent rows={rows} columns={columns} />
     </>

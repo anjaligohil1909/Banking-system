@@ -29,18 +29,18 @@ function Loan(props) {
       loanStartDate: "1/1/2024",
       loanApprovedBy: "User ABC",
     },
-    {
-      accountType: "Home",
-      accountNumber: 13579,
-      principalAmt: 1000000,
-      intRate: 0.075,
-      term: "30 years",
-      maturityDate: "12/31/2054",
-      nextPaymentDate: "5/31/2025",
-      installmentAmt: 2500,
-      loanStartDate: "1/1/2024",
-      loanApprovedBy: "User XYZ",
-    },
+    // {
+    //   accountType: "Home",
+    //   accountNumber: 13579,
+    //   principalAmt: 1000000,
+    //   intRate: 0.075,
+    //   term: "30 years",
+    //   maturityDate: "12/31/2054",
+    //   nextPaymentDate: "5/31/2025",
+    //   installmentAmt: 2500,
+    //   loanStartDate: "1/1/2024",
+    //   loanApprovedBy: "User XYZ",
+    // },
   ];
   return (
     <>
@@ -60,7 +60,7 @@ function Loan(props) {
         <Typography variant="h4" gutterBottom mt={2}>
           Loan Details
         </Typography>
-        <Stack direction="row" spacing={1} pb={2}>
+        {/* <Stack direction="row" spacing={1} pb={2}>
           <Chip
             color="success"
             icon={<AttachMoneyOutlined />}
@@ -77,7 +77,7 @@ function Loan(props) {
             clickable
             href="/customer/create-request"
           />
-        </Stack>
+        </Stack> */}
         <Stack direction="row" spacing={3}>
           {accountDetails.map((item, idx) => {
             return <AccountTile key={idx} index={idx} accountDetails={item} />;
