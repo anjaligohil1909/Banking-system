@@ -5,16 +5,9 @@ import TableComponent from "./Table";
 import { Button } from "@mui/material";
 
 const columns = [
-  { id: "firstname", label: "First Name", align: "center", minWidth: 130 },
-  { id: "lastname", label: "Last Name", align: "center", minWidth: 130 },
-  { id: "email", label: "Email", align: "center", minWidth: 140 },
-  { id: "phoneno", label: "Phone No.", align: "center", minWidth: 130 },
-  {
-    id: "noofacc",
-    label: "Number of Accounts",
-    align: "center",
-    maxWidth: 100,
-  },
+  { id: "accountNum", label: "Account number", align: "center", minWidth: 130 },
+  { id: "reqType", label: "Request type", align: "center", minWidth: 130 },
+  { id: "newVal", label: "New value", align: "center", minWidth: 140 },
   {
     id: "action",
     label: "Approve / Deny",
@@ -49,24 +42,26 @@ const columns = [
   }
 ];
 
-function createData(firstname, lastname, email, phoneno, noofacc) {
-  return { firstname, lastname, email, phoneno, noofacc };
+function createData(accountNum, reqType, newVal) {
+  return { accountNum, reqType, newVal };
 }
 
 const rows = [
-  createData("Anjali", "Gohil", "anjali@gmail.com", 3451234325, 1),
-  createData("John", "Doe", "john@example.com", 1234567890, 2),
-  createData("Jane", "Smith", "jane@example.com", 9876543210, 3),
-  createData("Alice", "Johnson", "alice@example.com", 5551234567, 1),
-  createData("Bob", "Brown", "bob@example.com", 9998887777, 2),
-  createData("Emily", "Davis", "emily@example.com", 1112223333, 1),
-  createData("Michael", "Wilson", "michael@example.com", 4445556666, 3),
-  createData("Sarah", "Anderson", "sarah@example.com", 7778889999, 2),
-  createData("David", "Martinez", "david@example.com", 2223334444, 1),
-  createData("Olivia", "Taylor", "olivia@example.com", 8889990000, 2),
-  createData("James", "Lee", "james@example.com", 6667778888, 3),
-  createData("Sophia", "Brown", "sophia@example.com", 3334445555, 1),
-]
+	createData("36787964", "Change name", "Mr Bruce Wayne"),
+	createData("56783489", "Change phone number", "9395557867"),
+	createData("987654321", "Change email", "rose@gmail.com"),
+	createData("123456789", "Change email", "stark@yahoo.com"),
+	createData("876543210", "Change name", "Ms Jessica Saunders"),
+	createData("456789123", "Change email", "young@gmail.com"),
+	createData("234567890", "Change phone number", "3938556702"),
+	createData("543210987", "Change name", "Mr Alfred Old"),
+	createData("439834843", "Change name", "Mrs Tulip Paul"),
+	createData("578349224", "Change phone number", "7490274669"),
+	createData("905378539", "Change name", "Ms Jessica Saunders"),
+	createData("437939530", "Change email", "wayne@gmail.com"),
+	createData("539034753", "Change name", "Mr Joe Gatto"),
+	createData("434903458", "Change phone number", "3648967783"),
+];
 
 function ProfileEditRequests() {
     const [page, setPage] = useState(0);
@@ -82,7 +77,7 @@ function ProfileEditRequests() {
   };
   return (
     <>
-      <h2 style={{ marginBottom: "2rem" }}>Pending List of Customers</h2>
+      <h2 style={{ marginBottom: "2rem" }}>Pending Edit Requests</h2>
       <SearchBar />
       <TableComponent rows={rows} columns={columns} />
     </>

@@ -42,14 +42,14 @@ function EmployeeDashboard() {
             textColor={"white"}
             title={Math.round((Math.random() * 100) / 2)}
             body={"Loan Requests"}
-            linkTo={"/"}
+            linkTo={"/employee/loan-requests"}
           />
           <DashboardTile
             bgColor={"#6e97da"}
             textColor={"white"}
             title={Math.round((Math.random() * 100) / 2)}
             body={"Transaction Requests"}
-            linkTo={"/"}
+            linkTo={"/employee/transaction-requests"}
           />
           <DashboardTile
             bgColor={"#48858b"}

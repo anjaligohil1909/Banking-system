@@ -35,7 +35,7 @@ function AccountTile({ index, accountDetails }) {
     currency: "USD",
   });
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{backgroundColor: "#F0F8FF", maxWidth: 345 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">

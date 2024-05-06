@@ -47,8 +47,6 @@ function createData(accountNum, amount, term, type) {
 }
 
 const rows = [
-	createData("36787964", "$35000", "10 years", "Student"),
-	createData("36787964", "$35000", "10 years", "Personal"),
 	createData("987654321", "$70000", "15 years", "Student"),
 	createData("123456789", "$90000", "20 years", "Personal"),
 	createData("876543210", "$120000", "25 years", "Home"),
