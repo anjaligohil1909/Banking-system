@@ -140,7 +140,6 @@ CREATE TABLE kjat_customer (
     cust_email    VARCHAR(200) NOT NULL COMMENT 'CUST_EMAIL - Customer email',
     cust_password VARCHAR(30) NOT NULL COMMENT 'CUST_PASSWORD - Customer Password for the database',
     cust_dob      DATETIME COMMENT 'CUST_DOB - CUSTOMER DATE of BIRTH',
-    cust_dob1     DATETIME COMMENT 'CUST_DOB - CUSTOMER Date of Birth',
     cust_phno     BIGINT NOT NULL COMMENT 'CUST_PHNO -  Customer Phone No.'
 );
 
