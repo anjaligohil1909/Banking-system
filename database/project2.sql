@@ -1,15 +1,5 @@
--- SQLINES DEMO *** le SQL Developer Data Modeler 23.1.0.087.0806
--- SQLINES DEMO *** -05-06 19:41:47 EDT
--- SQLINES DEMO *** le Database 21c
--- SQLINES DEMO *** le Database 21c
-
-
-
--- SQLINES DEMO *** no DDL - MDSYS.SDO_GEOMETRY
-
 -- SQLINES DEMO *** no DDL - XMLTYPE
 
--- SQLINES LICENSE FOR EVALUATION USE ONLY
 CREATE TABLE kjat_acc_add (
     add_type VARCHAR(10) NOT NULL COMMENT 'ADD_TYPE - ADDRESS TYPE.
 
@@ -704,50 +694,3 @@ BEGIN
 END //
 
 DELIMITER ;
-
-
-
-
-
--- SQLINES DEMO *** per Data Modeler Summary Report: 
--- 
--- SQLINES DEMO ***                        13
--- SQLINES DEMO ***                         1
--- SQLINES DEMO ***                        32
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO *** DY                      0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         6
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***  TYPE                   0
--- SQLINES DEMO ***  TYPE                   0
--- SQLINES DEMO ***  TYPE BODY              0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO *** EGMENT                  0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO *** ED VIEW                 0
--- SQLINES DEMO *** ED VIEW LOG             0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- 
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
--- 
--- SQLINES DEMO ***                         0
--- 
--- SQLINES DEMO ***                         0
--- SQLINES DEMO *** A                       0
--- SQLINES DEMO *** T                       0
--- 
--- SQLINES DEMO ***                         0
--- SQLINES DEMO ***                         0
