@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from .models import Customer, Account
-from .serializers import CustomerSerializer, AccountSerializer
+from .models import Customer, Account, Loan
+from .serializers import CustomerSerializer, AccountSerializer, LoanSerializer
 import uuid, datetime
 
 class AccountOverview(generics.ListAPIView):
@@ -54,3 +54,10 @@ class RegisterCustomer(APIView):
                 return Response(account_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LoanDetailList(generics.ListAPIView):
+    """
+    API endpoint to allow users to view a list of loans.
+    """
+    queryset = Loan.objects.all()
+    serializer_class = LoanSerializer

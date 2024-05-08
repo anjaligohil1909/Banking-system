@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, Address, Customer
+from .models import Account, Address, Customer, Loan
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,3 +48,8 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['add_id', 'city', 'st_add', 'state', 'pos_code', 'country']
+
+class LoanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Loan
+        fields = ['acc_no', 'lamount', 'ltype', 'lmonths', 'lpay']
