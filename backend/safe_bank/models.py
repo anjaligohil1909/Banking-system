@@ -1,4 +1,11 @@
 from django.db import models
+import uuid
+
+def generate_cust_id():
+    return str(uuid.uuid4())[:12]
+
+def generate_acc_no():
+    return str(uuid.uuid4())[:10]
 
 class AccAdd(models.Model):
     add_type = models.CharField(max_length=10, choices=[('COLLATERAL', 'Collateral'), ('MAILING', 'Mailing')])
@@ -8,9 +15,10 @@ class AccAdd(models.Model):
     def __str__(self):
         return f"{self.add_type} Address ID: {self.add_id}"
 
+# model now generates unique IDs by itself
 class Account(models.Model):
-    acc_no = models.CharField(max_length=10, primary_key=True)
-    date_open = models.DateTimeField()
+    acc_no = models.CharField(max_length=10, primary_key=True, default=generate_acc_no)
+    date_open = models.DateTimeField(auto_now_add=True)
     acc_type = models.CharField(max_length=1, choices=[('C', 'Checking'), ('S', 'Savings'), ('L', 'Loan')])
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -45,8 +53,9 @@ class CustAdd(models.Model):
     def __str__(self):
         return f"{self.add_type} - {self.cust_id.cust_id}"
 
+# model now generates unique IDs by itself
 class Customer(models.Model):
-    cust_id = models.CharField(max_length=12, primary_key=True)
+    cust_id = models.CharField(max_length=12, primary_key=True, default=generate_cust_id)
     cust_fname = models.CharField(max_length=20)
     cust_lname = models.CharField(max_length=20, blank=True)
     cust_email = models.EmailField(max_length=200)

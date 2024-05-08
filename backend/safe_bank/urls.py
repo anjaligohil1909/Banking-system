@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AccountOverview, CustomerList, CheckingAccountView, SavingsAccountView, TransactionView
+from .views import AccountOverview, CustomerList, CheckingAccountView, SavingsAccountView, TransactionView, RegisterCustomer
 
 urlpatterns = [
     path('api/accounts/', AccountOverview.as_view(), name='account-overview'),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('api/customer/<str:customer_id>/saving-account/', SavingsAccountView.as_view(), name='savings-details'),
     path('api/customer/<str:acc_no>/checking/transactions', TransactionView.as_view(), name='savings-details'),
     # path('api/customer/saving/transactions', CustomerList.as_view(), name='savings-details'),
+    path('api/register/', RegisterCustomer.as_view(), name='register_customer'),
 ]
