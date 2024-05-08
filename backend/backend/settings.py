@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'safe_bank',
         'USER': 'root',
-        'PASSWORD': 'password', # remove password if you haven't set one
+        'PASSWORD': '', # remove password if you haven't set one
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -117,6 +117,10 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+...
+ALLOWED_HOSTS = ['*']
+...
 
 
 # Internationalization
