@@ -13,9 +13,11 @@ class Account(models.Model):
     date_open = models.DateTimeField()
     acc_type = models.CharField(max_length=1, choices=[('C', 'Checking'), ('S', 'Savings'), ('L', 'Loan')])
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    routing_no = models.BigIntegerField(default=100220110)
 
     def __str__(self):
-        return f"{self.acc_type} Account No. {self.acc_no}"
+        return f"{self.acc_no}"
 
 class Address(models.Model):
     add_id = models.CharField(max_length=12, primary_key=True)
@@ -53,7 +55,7 @@ class Customer(models.Model):
     cust_phno = models.BigIntegerField()
 
     def __str__(self):
-        return f"{self.cust_fname} {self.cust_lname}"
+        return f"{self.cust_id}"
 
 class Homloan(models.Model):
     acc_no = models.ForeignKey('Account', on_delete=models.CASCADE)
@@ -93,7 +95,7 @@ class Perloan(models.Model):
 
 class Save(models.Model):
     acc_no = models.ForeignKey('Account', on_delete=models.CASCADE)
-    intrate = models.DecimalField(max_digits=5, decimal_places=2)
+    intrate = models.DecimalField(max_digits=5, decimal_places=2)    
 
     def __str__(self):
         return f"Savings Account: {self.acc_no.acc_no}"
