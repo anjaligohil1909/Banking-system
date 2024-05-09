@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from .models import Customer, Account, TxnList
-from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer
+from .models import Customer, Account, TxnList, Loan
+from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, LoanSerializer
 
 import uuid, datetime
 
@@ -106,3 +106,13 @@ class RegisterCustomer(APIView):
                 return Response(account_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LoansView(generics.ListAPIView):
+    serializer_class = LoanSerializer
+    def get_queryset(self):
+        loan_id = self.request.query_params.get("loanId")
+
+        queryset = Loan.objects.all()
+        if loan_id is not None:
+            queryset = queryset.filter(id=loan_id)
+        return queryset;
