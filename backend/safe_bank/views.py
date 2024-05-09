@@ -137,7 +137,7 @@ class LoansView(generics.ListAPIView):
         queryset = Loan.objects.all()
         if loan_id is not None:
             queryset = queryset.filter(id=loan_id)
-        return queryset;
+        return queryset
 
 class CustomerLoansView(generics.GenericAPIView):
     def get_loanByAccount(self, accountNo):

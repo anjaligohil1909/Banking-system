@@ -13,6 +13,7 @@ import LoanRequests from "./components/EmployeeDashboard/LoanRequests";
 import TransactionRequests from "./components/EmployeeDashboard/TransactionRequests";
 import EmployeeDashboard from "./components/EmployeeDashboard/EmployeeDashboard";
 import ProfileEditRequests from "./components/EmployeeDashboard/ProfileEditRequests";
+import CustomerDetail from "./components/EmployeeDashboard/CustomerDetail";
 
 const employeeSideBarList = {
   Dashboard: "",
@@ -56,6 +57,7 @@ function App() {
           <Route path="loan-requests" element={<LoanRequests />} />
           <Route path="transaction-requests" element={<TransactionRequests />} />
           <Route path="profile-edit-requests" element={<ProfileEditRequests />} />
+          <Route path="customer-detail" element={<CustomerDetail />} />
         </Route>
       </Routes>
     </div>
