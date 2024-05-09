@@ -23,6 +23,7 @@ from .views import (
     RequestViewWithID,
     TransactionRequestView,
     # EditTransactionRequestView
+    LoginAPIView
 )
 
 urlpatterns = [
@@ -57,6 +58,7 @@ urlpatterns = [
     ),
     # path('api/customer/create_request/', CreateRequest.as_view(), name='create-request'),
     # path('api/create_request/', CreateRequest.as_view(), name='create_request'),
+    path('api/login/', LoginAPIView.as_view(), name='login'),
     path("api/employee/loan-requests/", LoanRequestView.as_view(), name="loan-request"),
     path(
         "api/employee/transaction-requests",

@@ -1,23 +1,15 @@
 from django.db import models
-import uuid
-
-def generate_cust_id():
-    return str(uuid.uuid4())[:12]
-
-def generate_acc_no():
-    return str(uuid.uuid4())[:10]
 
 class AccAdd(models.Model):
     add_type = models.CharField(max_length=10, choices=[('COLLATERAL', 'Collateral'), ('MAILING', 'Mailing')])
-    add_id = models.CharField(max_length=12, primary_key=True)
+    add_id = models.AutoField(primary_key=True)
     acc_no = models.ForeignKey('Account', on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.add_type} Address ID: {self.add_id}"
 
-# model now generates unique IDs by itself
 class Account(models.Model):
-    acc_no = models.CharField(max_length=10, primary_key=True, default=generate_acc_no)
+    acc_no = models.AutoField(primary_key=True)
     date_open = models.DateTimeField(auto_now_add=True)
     acc_type = models.CharField(max_length=1, choices=[('C', 'Checking'), ('S', 'Savings'), ('L', 'Loan')])
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
@@ -25,9 +17,10 @@ class Account(models.Model):
     routing_no = models.BigIntegerField(default=100220110)
 
     def __str__(self):
-        return f"{self.acc_no}"
+        return f"Account No. {self.acc_no}"
+
 class Address(models.Model):
-    add_id = models.CharField(max_length=12, primary_key=True)
+    add_id = models.AutoField(primary_key=True)
     city = models.CharField(max_length=20)
     st_add = models.CharField(max_length=20)
     state = models.CharField(max_length=20)
@@ -46,25 +39,24 @@ class Check(models.Model):
 
 class CustAdd(models.Model):
     add_type = models.CharField(max_length=11, choices=[('RESIDENTIAL', 'Residential'), ('BUSINESS', 'Business')])
-    add_id = models.CharField(max_length=12)
+    add_id = models.AutoField(primary_key=True)
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.add_type} - {self.cust_id.cust_id}"
+        return f"{self.add_type} - Customer ID {self.cust_id.cust_id}"
 
-# model now generates unique IDs by itself
 class Customer(models.Model):
-    cust_id = models.CharField(max_length=12, primary_key=True, default=generate_cust_id)
+    cust_id = models.AutoField(primary_key=True)
     cust_fname = models.CharField(max_length=20)
     cust_lname = models.CharField(max_length=20, blank=True)
     cust_email = models.EmailField(max_length=200)
-    cust_password = models.CharField(max_length=30)
+    cust_password = models.CharField(max_length=200)
     cust_dob = models.DateTimeField()
     cust_phno = models.BigIntegerField()
     cust_ssn = models.CharField(max_length=9)
 
     def __str__(self):
-        return f"{self.cust_id}"
+        return f"Customer ID {self.cust_id}"
 
 class Homloan(models.Model):
     acc_no = models.ForeignKey('Account', on_delete=models.CASCADE)
@@ -77,7 +69,7 @@ class Homloan(models.Model):
         return f"Home Loan for Account: {self.acc_no.acc_no}"
 
 class InsCmpny(models.Model):
-    insc_id = models.CharField(max_length=12, primary_key=True)
+    insc_id = models.AutoField(primary_key=True)
     insc_name = models.CharField(max_length=50)
     add_id = models.ForeignKey('Address', on_delete=models.CASCADE)
 
@@ -121,7 +113,7 @@ class Stuloan(models.Model):
         return f"Student Loan Account: {self.acc_no.acc_no}"
 
 class TxnList(models.Model):
-    txn_id = models.CharField(max_length=12, primary_key=True)
+    txn_id = models.AutoField(primary_key=True)
     amount = models.DecimalField(max_digits=7, decimal_places=2)
     datetime = models.DateTimeField()
     sender_no = models.ForeignKey('Account', related_name='sent_txns', on_delete=models.CASCADE)

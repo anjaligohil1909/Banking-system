@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.contrib.auth.hashers import check_password
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
@@ -6,9 +7,8 @@ from rest_framework.decorators import api_view
 import json
 from rest_framework.views import APIView
 from .models import Customer, Account, TxnList, Request, Loan, HomeLoanRequest, StudentLoanRequest, PersonalLoanRequest, LoanRequest, TransactionRequest
-from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, RequestSerializer, RequestSerializer, LoanSerializer, LoanRequestSerializer, HomeLoanRequestSerializer, StudentLoanRequestSerializer, PersonalLoanRequestSerializer, TransactionRequestSerializer, ProfileEditRequestSerializer
+from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, RequestSerializer, RequestSerializer, LoanSerializer, LoanRequestSerializer, HomeLoanRequestSerializer, StudentLoanRequestSerializer, PersonalLoanRequestSerializer, TransactionRequestSerializer, ProfileEditRequestSerializer, AddressSerializer
 from django.db import transaction
-import uuid, datetime
 
 class AccountOverview(generics.ListAPIView):
     """
@@ -136,25 +136,58 @@ class RegisterCustomer(APIView):
     def post(self, request):
         customer_data = request.data.get('customer')
         account_data = request.data.get('account')
+        address_data = request.data.get('address')
 
-        customer_serializer = CustomerSerializer(data=customer_data)
-        if customer_serializer.is_valid():
-            customer = customer_serializer.save()
+        # First, check if customer exists
+        existing_customer = Customer.objects.filter(
+            cust_email=customer_data['cust_email'],
+            cust_ssn=customer_data['cust_ssn'],
+            cust_phno=customer_data['cust_phno']
+        ).first()
 
-            # ensuring cust_id is passed as an ID
-            account_data['cust_id'] = customer.pk  # customer.pk refers to the primary key
-            account_serializer = AccountSerializer(data=account_data)
+        if existing_customer:
+            # Verify password
+            if not check_password(customer_data['cust_password'], existing_customer.cust_password):
+                return Response({'error': 'Incorrect password for existing customer.'}, status=status.HTTP_400_BAD_REQUEST)
 
-            if account_serializer.is_valid():
-                account = account_serializer.save()
-                return Response({
-                    'customer': customer_serializer.data,
-                    'account': account_serializer.data
-                }, status=status.HTTP_201_CREATED)
-            else:
-                return Response(account_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Check if the account type is different
+            existing_account = Account.objects.filter(cust_id=existing_customer.cust_id, acc_type=account_data['acc_type']).exists()
+            if existing_account:
+                return Response({'error': 'An account of this type already exists for this customer.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            customer = existing_customer
         else:
-            return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Serialize and save the customer if not existing
+            customer_serializer = CustomerSerializer(data=customer_data)
+            if customer_serializer.is_valid():
+                customer = customer_serializer.save()
+            else:
+                return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle address: Always creating a new address for simplicity, adjust if needed
+        address_serializer = AddressSerializer(data=address_data)
+        if address_serializer.is_valid():
+            address = address_serializer.save()
+        else:
+            return Response(address_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Prepare account data
+        account_data['cust_id'] = customer.pk
+        account_data['add_id'] = address.pk
+
+        # Serialize and save the account data
+        account_serializer = AccountSerializer(data=account_data)
+        if account_serializer.is_valid():
+            account_serializer.save()
+        else:
+            return Response(account_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({
+            'customer': CustomerSerializer(customer).data,
+            'account': account_serializer.data,
+            'address': address_serializer.data
+        }, status=status.HTTP_201_CREATED)
+
 
 class LoansView(generics.ListAPIView):
     serializer_class = LoanSerializer
@@ -306,3 +339,21 @@ class CreateRequest(APIView):
             transaction_request_serializer.save()
             return Response(transaction_request_serializer.data, status=status.HTTP_201_CREATED)
         return Response(transaction_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LoginAPIView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        try:
+            customer = Customer.objects.get(cust_email=email)
+            if check_password(password, customer.cust_password):
+                return Response({
+                    'message': 'Login successful',
+                    'cust_id': customer.cust_id
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid password'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Customer.DoesNotExist:
+            return Response({'error': 'Customer not found'}, status=status.HTTP_404_NOT_FOUND)

@@ -1,36 +1,45 @@
 from rest_framework import serializers
 from .models import Account, Address, Customer, TxnList, Request, Loan, HomeLoanRequest, StudentLoanRequest, PersonalLoanRequest, ProfileEditRequest, TransactionRequest, LoanRequest
+from django.contrib.auth.hashers import make_password, check_password
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        # for generating unique cust IDs, API does not expect cust_id during registration
+        fields = ['cust_id', 'cust_fname', 'cust_lname', 'cust_email', 'cust_password', 'cust_dob', 'cust_phno', 'cust_ssn']
         read_only_fields = ['cust_id']
-        fields = [
-            'cust_id', 'cust_fname', 'cust_lname', 'cust_email',
-            'cust_password', 'cust_dob', 'cust_phno'
-        ]
 
-    # validating user input in create customer form
-    def validate_cust_email(self, value):
-        if "@" not in value:
-            raise serializers.ValidationError("Email must include an '@' character.")
-        return value
+    def validate(self, data):
+        # Attempt to find a matching customer by email, SSN, and phone number
+        matching_customers = Customer.objects.filter(
+            cust_email=data['cust_email'], 
+            cust_ssn=data['cust_ssn'], 
+            cust_phno=data['cust_phno']
+        )
 
-    def validate_cust_phno(self, value):
-        if len(str(value)) != 10:
-            raise serializers.ValidationError("Phone number must be 10 digits long.")
-        return value
+        if matching_customers.exists():
+            customer = matching_customers.first()
+            # If customer exists, check if the password matches
+            if check_password(data['cust_password'], customer.cust_password):
+                # If all four match, return data with customer ID to link the new account
+                data['cust_id'] = customer.pk
+                return data
+            else:
+                # If password does not match, raise validation error
+                raise serializers.ValidationError("Incorrect information provided. Please provide all correct details or none.")
+        
+        # Check if any other customer has any of the same unique fields (partial match)
+        if Customer.objects.filter(cust_email=data['cust_email']).exists() or \
+           Customer.objects.filter(cust_phno=data['cust_phno']).exists() or \
+           Customer.objects.filter(cust_ssn=data['cust_ssn']).exists():
+            raise serializers.ValidationError("Incorrect information provided. Please provide all correct details or none.")
+        
+        # If completely new customer, proceed to create a new one
+        return data
 
-    def validate_cust_fname(self, value):
-        if not value:
-            raise serializers.ValidationError("First name is required.")
-        return value
+    def create(self, validated_data):
+        validated_data['cust_password'] = make_password(validated_data['cust_password'])
+        return super().create(validated_data)
 
-    def validate_cust_lname(self, value):
-        if not value:
-            raise serializers.ValidationError("Last name is required.")
-        return value
 
 class AccountSerializer(serializers.ModelSerializer):
     cust_id = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.all())

@@ -14,15 +14,51 @@ import {
 
 import Button from "@mui/material/Button";
 import { useState } from "react";
+import axios from "axios";
 
 export default function CustomerRequest() {
 	const [salutation, setSalutation] = useState("");
 	const [requestType, setRequestType] = useState("");
 	const [loanType, setLoanType] = useState("");
 	const [degreeType, setDegreeType] = useState("");
+	const [transactionAmount, setTransactionAmount] = useState("");
+	const [acctNo, setacctNo] = useState("");
+	const [fname, setfname] = useState("");
+	const [lname, setlname] = useState("");
+	const [email, setemail] = useState("");
+	const [phno, setphno] = useState("");
+	const [loanAmt, setloanAmt] = useState(0);
+	const [term, setterm] = useState(0);
+	const [uName, setuName] = useState("");
+	const [uID, setuID] = useState("");
+	const [gradDate, setgradDate] = useState("");
+	const [builtYear, setbuiltYear] = useState("");
+	const [insAcctNo, setinsAcctNo] = useState("");
+	const [insYearly, setinsYearly] = useState("");
+	const [insName, setinsName] = useState("");
 
 	const handleSalutationChange = (event) => {
 		setSalutation(event.target.value);
+	};
+
+	const handleinsNameChange = (event) => {
+		setinsName(event.target.value);
+	};
+
+	const handlefnameChange = (event) => {
+		setfname(event.target.value);
+	};
+
+	const handlelnameChange = (event) => {
+		setlname(event.target.value);
+	};
+
+	const handleEmailChange = (event) => {
+		setemail(event.target.value);
+	};
+
+	const handlePhnoChange = (event) => {
+		setphno(event.target.value);
 	};
 
 	const handleRequestTypeChange = (event) => {
@@ -35,6 +71,169 @@ export default function CustomerRequest() {
 
 	const handleDegreeTypeChange = (event) => {
 		setDegreeType(event.target.value);
+	};
+
+	const handleTransactionChange = (event) => {
+		setTransactionAmount(event.target.value);
+	};
+
+	const handleAcctNoChange = (event) => {
+		setacctNo(event.target.value);
+	};
+
+	const handleloanAmtChange = (event) => {
+		setloanAmt(event.target.value);
+	};
+
+	const handletermChange = (event) => {
+		setterm(event.target.value);
+	};
+
+	const handleuNameChange = (event) => {
+		setuName(event.target.value);
+	};
+
+	const handleuIDChange = (event) => {
+		setuID(event.target.value);
+	};
+
+	const handlegradDateChange = (event) => {
+		setgradDate(event.target.value);
+	};
+
+	const handlebuiltYearChange = (event) => {
+		setbuiltYear(event.target.value);
+	};
+
+	const handleinsYearlyChange = (event) => {
+		setinsYearly(event.target.value);
+	};
+
+	const handleinsAcctNoChange = (event) => {
+		setinsAcctNo(event.target.value);
+	};
+
+	const submitFormData = async (formData) => {
+		console.log(formData);
+		try {
+			const response = await axios.post(
+				"http://127.0.0.1:8000/api/customer/create_request/",
+				formData
+			);
+			return response.data; // Return response data
+		} catch (error) {
+			throw new Error("Failed to submit form data"); // Throw an error if request fails
+		}
+	};
+
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+
+		try {
+			if (requestType=="loan"&& loanType=="P"){
+				const formData = {
+					request_type: requestType,
+					// status: "Pending",
+					cust_id: "001",
+					// created_at: "2023-05-09T09:15:00.000Z",
+					ltype:loanType,
+					lamount:parseInt(loanAmt),
+					lmonths:term*12,
+					lpay:500.00,
+					lrate:6.00,
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+			if (requestType=="loan" && loanType=="S"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "001",
+					created_at: "2023-05-09T09:15:00.000Z",
+					ltype:loanType,
+					lamount:parseInt(loanAmt),
+					lmonths:term*12,
+					lpay:500.00,
+					lrate:6.00,
+					uni_name:uName,
+					stu_id:uID,
+					slevel:degreeType,
+					smonth:parseInt(gradDate.slice(-2)),
+					syear:parseInt(gradDate.slice(0,4)),
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+			if (requestType=="loan" && loanType=="H"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "001",
+					created_at: "2023-05-09T09:15:00.000Z",
+					ltype:loanType,
+					lamount:parseInt(loanAmt),
+					lmonths:term*12,
+					lpay:500.00,
+					lrate:6.00,
+					house_buildyr:builtYear,
+					hm_ins_accno:insAcctNo,
+					yr_ins_prem:insYearly,
+					insc_id:insName,
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+			if (requestType=="transaction"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "001",
+					// created_at: "2023-05-09T09:15:00.000Z",
+					amount:transactionAmount,
+					sender_no:"001",
+					receiver_no:acctNo,
+					// datetime:"2023-05-09T09:15:00.000Z",
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+			if (requestType=="profile_edit"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "C0006",
+					created_at: "2023-05-09T09:15:00.000Z",
+					cust_fname:fname,
+					cust_lname:lname,
+					cust_email:email,
+					cust_phno:phno,
+					cust_password:" ",
+					cust_dob:"",
+					cust_ssn:"",
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+		
+
+			
+
+			// Reset form data or perform any other actions after successful submission
+		} catch (error) {
+			console.error("Error:", error);
+			// Handle error, display error message, etc.
+		}
 	};
 
 	return (
@@ -73,16 +272,16 @@ export default function CustomerRequest() {
 						onChange={handleRequestTypeChange}
 						required
 					>
-						<MenuItem value={"Loan"}>Request loan</MenuItem>
-						<MenuItem value={"Transaction"}>Make a transaction</MenuItem>
+						<MenuItem value={"loan"}>Request loan</MenuItem>
+						<MenuItem value={"transaction"}>Make a transaction</MenuItem>
 						{/* <MenuItem value={"Name"}>Change name</MenuItem>
 						<MenuItem value={"Phone"}>Change mobile number</MenuItem>
 						<MenuItem value={"Email"}>Change email address</MenuItem>
 						<MenuItem value={"Address"}>Change address</MenuItem> */}
-						<MenuItem value={"Personal"}>Edit personal details</MenuItem>
+						<MenuItem value={"profile_edit"}>Edit personal details</MenuItem>
 					</Select>
 				</FormControl>
-				{requestType == "Personal" ? (
+				{requestType == "profile_edit" ? (
 					<>
 						<FormControl
 							style={{ width: "250px", margin: "8px", display: "block" }}
@@ -108,6 +307,8 @@ export default function CustomerRequest() {
 								id="outlined-basic"
 								label="First Name"
 								variant="outlined"
+								value={fname}
+								onChange={handlefnameChange}
 								required
 							/>
 							<TextField
@@ -115,50 +316,60 @@ export default function CustomerRequest() {
 								id="outlined-basic"
 								label="Last Name"
 								variant="outlined"
+								value={lname}
+								onChange={handlelnameChange}
 							/>
 						</FormControl>
 					</>
 				) : null}
 
-				{requestType == "Personal" ? (
+				{requestType == "profile_edit" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
 								required
 								type="text"
 								label="New Email Address"
+								value={email}
+								onChange={handleEmailChange}
 							></TextField>
 						</FormControl>
 					</>
 				) : null}
-				{requestType == "Personal" ? (
+				{requestType == "profile_edit" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
 								required
 								type="text"
 								label="New Phone Number"
+								value={phno}
+								onChange={handlePhnoChange}
 							></TextField>
 						</FormControl>
 					</>
 				) : null}
-				{requestType == "Transaction" ? (
+				{requestType == "transaction" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
 								required
 								type="text"
 								label="Transaction Amount"
+								value={transactionAmount}
+								onChange={handleTransactionChange}
 							></TextField>
 							<TextField
 								required
 								type="text"
 								label="Account Number"
+								value={acctNo}
+								onChange={handleAcctNoChange}
 							></TextField>
 						</FormControl>
 					</>
 				) : null}
-				{requestType == "Personal" ? (
+				{/* {requestType == "Personal" ? (
 					<>
 						<FormControl sx={{ display: "inline", width: "100%" }}>
 							<TextField
@@ -174,15 +385,23 @@ export default function CustomerRequest() {
 							<TextField required type="text" label="ZipCode"></TextField>
 						</FormControl>
 					</>
-				) : null}
-				{requestType == "Loan" ? (
+				) : null} */}
+				{requestType == "loan" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
-							<TextField required type="text" label="Amount"></TextField>
+							<TextField
+								required
+								type="text"
+								label="Amount"
+								value={loanAmt}
+								onChange={handleloanAmtChange}
+							></TextField>
 							<TextField
 								required
 								type="text"
 								label="Maximum term (in years)"
+								value={term}
+								onChange={handletermChange}
 							></TextField>
 						</FormControl>
 						<FormControl
@@ -198,18 +417,20 @@ export default function CustomerRequest() {
 								onChange={handleLoanTypeChange}
 								required
 							>
-								<MenuItem value={"Home"}>Home loan</MenuItem>
-								<MenuItem value={"Student"}>Student loan</MenuItem>
-								<MenuItem value={"Personal"}>Personal loan</MenuItem>
+								<MenuItem value={"H"}>Home loan</MenuItem>
+								<MenuItem value={"S"}>Student loan</MenuItem>
+								<MenuItem value={"P"}>Personal loan</MenuItem>
 							</Select>
 						</FormControl>
-						{loanType == "Home" ? (
+						{loanType == "H" ? (
 							<>
 								<FormControl sx={{ display: "inline" }}>
 									<TextField
 										id="outlined-basic"
 										label="House built year"
 										variant="outlined"
+										value={builtYear}
+										onChange={handlebuiltYearChange}
 										required
 									/>
 								</FormControl>
@@ -218,16 +439,19 @@ export default function CustomerRequest() {
 								</Typography>
 
 								<FormControl sx={{ display: "block", width: "100%" }}>
-									<TextField required type="text" label="Name"></TextField>
+									<TextField required type="text" label="Name" value={insName}
+										onChange={handleinsNameChange}></TextField>
 								</FormControl>
 								<FormControl sx={{ display: "block", width: "100%" }}>
 									<TextField
 										required
 										type="text"
 										label="Account Number"
+										value={insAcctNo}
+										onChange={handleinsAcctNoChange}
 									></TextField>
 								</FormControl>
-								<FormControl sx={{ display: "inline", width: "100%" }}>
+								{/* <FormControl sx={{ display: "inline", width: "100%" }}>
 									<TextField
 										required
 										type="text"
@@ -239,17 +463,19 @@ export default function CustomerRequest() {
 									<TextField required type="text" label="City"></TextField>
 									<TextField required type="text" label="State"></TextField>
 									<TextField required type="text" label="ZipCode"></TextField>
-								</FormControl>
+								</FormControl> */}
 								<FormControl sx={{ display: "block", width: "100%" }}>
 									<TextField
 										required
 										type="text"
 										label="Yearly Premium"
+										value={insYearly}
+										onChange={handleinsYearlyChange}
 									></TextField>
 								</FormControl>
 							</>
 						) : null}
-						{loanType == "Student" ? (
+						{loanType == "S" ? (
 							<>
 								<FormControl
 									style={{ width: "250px", margin: "8px", display: "block" }}
@@ -266,8 +492,8 @@ export default function CustomerRequest() {
 										onChange={handleDegreeTypeChange}
 										required
 									>
-										<MenuItem value={"Home"}>Graduate degree</MenuItem>
-										<MenuItem value={"Student"}>Undergraduate degree</MenuItem>
+										<MenuItem value={"G"}>Graduate degree</MenuItem>
+										<MenuItem value={"U"}>Undergraduate degree</MenuItem>
 									</Select>
 								</FormControl>
 								<FormControl sx={{ display: "block", width: "100%" }}>
@@ -275,11 +501,15 @@ export default function CustomerRequest() {
 										required
 										type="text"
 										label="University Name"
+										value={uName}
+										onChange={handleuNameChange}
 									></TextField>
 									<TextField
 										required
 										type="text"
 										label="University ID"
+										value={uID}
+										onChange={handleuIDChange}
 									></TextField>
 								</FormControl>
 								<FormControl sx={{ display: "block" }}>
@@ -288,6 +518,8 @@ export default function CustomerRequest() {
 										label="Expected Graduation"
 										InputLabelProps={{ shrink: true, required: true }}
 										type="month"
+										value={gradDate}
+										onChange={handlegradDateChange}
 									/>
 								</FormControl>
 							</>
@@ -304,9 +536,14 @@ export default function CustomerRequest() {
 								margin: "10px",
 							}}
 						>
-							<Button variant="contained" color="success">
+							<Button
+								variant="contained"
+								color="success"
+								onClick={handleSubmit}
+							>
 								Request
 							</Button>
+
 							<Button variant="outlined" color="error">
 								Reset
 							</Button>
