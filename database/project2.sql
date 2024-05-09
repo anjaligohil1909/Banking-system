@@ -29,6 +29,7 @@ COLLATERAL - FOR HOME OR PERSONAL LOANS.
 CREATE TABLE kjat_account (
     acc_no    VARCHAR(10) NOT NULL COMMENT 'ACC_NO - Stores the Account Number',
     date_open DATETIME NOT NULL COMMENT 'DATE_OPEN -  Opening Date of the account',
+    balance   DECIMAL(9, 3) NOT NULL COMMENT 'BALANCE - Current Balance in the Account',
     acc_type  CHAR(1) NOT NULL COMMENT 'ACC_TYPE - Represents the Type of the ACCOUNT. CAN BE:
 
 C	-	Checking
@@ -64,9 +65,11 @@ CREATE TABLE kjat_address (
     city     VARCHAR(20) NOT NULL COMMENT 'CITY - Storing The city name in the address',
     st_add   VARCHAR(20) NOT NULL COMMENT 'ST_ADD - Storing Street Address',
     state    VARCHAR(20) NOT NULL COMMENT 'STATE - Storing State Address',
-    pos_code NVARCHAR(10) NOT NULL COMMENT 'POS_CODE - Storing the POSTAL CODE',
+    pos_code VARCHAR(10) NOT NULL COMMENT 'POS_CODE - Storing the POSTAL CODE',
     country  VARCHAR(20) COMMENT 'COUNTRY - Storing the Country mentioend in the address'
 );
+
+
 
 /* Moved to CREATE TABLE
 COMMENT ON COLUMN kjat_address.add_id IS
@@ -110,6 +113,73 @@ COMMENT ON COLUMN kjat_check.serchrg IS
 
 ALTER TABLE kjat_check ADD CONSTRAINT kjat_check_pk PRIMARY KEY ( acc_no );
 
+CREATE TABLE kjat_request (
+    req_id INT AUTO_INCREMENT PRIMARY KEY,
+    request_type ENUM('loan', 'profile_edit', 'transaction') NOT NULL,
+    status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    cust_id VARCHAR(12),  -- ForeignKey to Customer
+    FOREIGN KEY (cust_id) REFERENCES kjat_customer(cust_id)
+);
+
+CREATE TABLE Kjat_loanreq (
+    req_id INT PRIMARY KEY,
+    ltype ENUM('H', 'S', 'P') NOT NULL,
+    lrate DECIMAL(5, 2) NOT NULL,
+    lamount DECIMAL(9, 3) NOT NULL,
+    lmonths SMALLINT NOT NULL,
+    lpay DECIMAL(6, 2) NOT NULL,
+    FOREIGN KEY (req_id) REFERENCES kjat_request(req_id) ON DELETE CASCADE
+);
+
+ALTER TABLE kjat_loanreq ADD CONSTRAINT kjat_loanreq_pk PRIMARY KEY ( acc_no );
+
+CREATE TABLE kjat_homlnreq (
+    req_id INT PRIMARY KEY,
+    house_build_year SMALLINT NOT NULL,
+    home_insurance_account VARCHAR(12) NOT NULL,
+    yearly_insurance_premium DECIMAL(7, 2) NOT NULL,
+    FOREIGN KEY (req_id) REFERENCES LoanRequest(req_id)
+);
+
+CREATE TABLE kjat_stuloanreq (
+    req_id INT PRIMARY KEY,
+    uni_name VARCHAR(30) NOT NULL,
+    stu_id VARCHAR(12) NOT NULL,
+    slevel ENUM('U', 'G') NOT NULL,
+    smonth TINYINT NOT NULL,
+    syear SMALLINT NOT NULL,
+    FOREIGN KEY (req_id) REFERENCES kjat_loanreq(req_id)
+);
+
+ALTER TABLE kjat_stuloanreq
+    ADD CONSTRAINT c_stulonreq_mon CHECK ( smonth BETWEEN 1 AND 12 );
+
+CREATE TABLE PerloanRequest (
+    req_id INT PRIMARY KEY,
+    credit_score SMALLINT NOT NULL,
+    FOREIGN KEY (req_id) REFERENCES loanreq(req_id)
+);
+
+CREATE TABLE kjat_edit_profile (
+    req_id INT PRIMARY KEY,
+    cust_id VARCHAR(12) NOT NULL,
+    cust_email VARCHAR(200),
+    cust_password VARCHAR(30),
+    cust_phno BIGINT,
+    cust_ssn VARCHAR(9),
+    FOREIGN KEY (req_id) REFERENCES kjat_request(req_id)
+);
+
+CREATE TABLE kjat_txn_req (
+    req_id INT PRIMARY KEY,
+    amount DECIMAL(7, 2) NOT NULL,
+    datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    sender_no VARCHAR(10) NOT NULL,
+    receiver_no VARCHAR(10) NOT NULL,
+    FOREIGN KEY (req_id) REFERENCES kjat_request(req_id)
+);
+
 -- SQLINES LICENSE FOR EVALUATION USE ONLY
 CREATE TABLE kjat_cust_add (
     add_type VARCHAR(11) NOT NULL COMMENT 'ADD_TYPE - Address Type between Customer and linked Address.
@@ -141,6 +211,7 @@ CREATE TABLE kjat_customer (
     cust_password VARCHAR(30) NOT NULL COMMENT 'CUST_PASSWORD - Customer Password for the database',
     cust_dob      DATETIME COMMENT 'CUST_DOB - CUSTOMER DATE of BIRTH',
     cust_phno     BIGINT NOT NULL COMMENT 'CUST_PHNO -  Customer Phone No.'
+    cust_ssn      VARCHAR(9) NOT NULL COMMENT 'CUST_SSN - Customer Social Security Number'
 );
 
 /* Moved to CREATE TABLE
@@ -277,7 +348,7 @@ ALTER TABLE kjat_loan ADD CONSTRAINT kjat_loan_pk PRIMARY KEY ( acc_no );
 -- SQLINES LICENSE FOR EVALUATION USE ONLY
 CREATE TABLE kjat_perloan (
     acc_no  VARCHAR(10) NOT NULL COMMENT 'ACC_NO - Stores the Account Number',
-    cred_sc SMALLINT NOT NULL COMMENT 'CRED_SC - Credit Score at time of loan origination'
+
 );
 
 /* Moved to CREATE TABLE
@@ -693,3 +764,64 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DROP TRIGGER IF EXISTS trg_after_update_loan_request;
+
+CREATE PROCEDURE create_homeloan(IN req_id INT)
+BEGIN
+    DECLARE house_build_year SMALLINT;
+    DECLARE home_insurance_account VARCHAR(12);
+    DECLARE yearly_insurance_premium DECIMAL(7, 2);
+    DECLARE cust_id VARCHAR(12);
+    DECLARE acc_no VARCHAR(10);
+    DECLARE ltype CHAR(1);
+    DECLARE lrate DECIMAL(5, 2);
+    DECLARE lamount DECIMAL(9, 3);
+    DECLARE lmonths SMALLINT;
+    DECLARE lpay DECIMAL(6, 2);
+    DECLARE lmonths SMALLINT;
+    DECLARE created_at DATETIME;
+    DECLARE acc_no VARCHAR(10);
+    
+    SELECT house_build_year, home_insurance_account, yearly_insurance_premium
+    INTO house_build_year, home_insurance_account, yearly_insurance_premium
+    FROM kjat_homlnreq
+    WHERE req_id = req_id;
+
+    SELECT ltype, lrate, lamount, lmonths, lpay
+    INTO ltype, lrate, lamount, lmonths, lpay
+    FROM kjat_loanreq 
+    WHERE req_id = req_id;
+
+    SELECT cust_id, created_at 
+    INTO cust_id, created_at
+    FROM kjat_request
+    WHERE req_id = req_id;
+
+    INSERT INTO kjat_account (acc_no, date_open, lamount, 'L', cust_id)
+
+    INSERT INTO kjat_loan (acc_no, lrate, lamount, lmonths, ltype, lpay)
+    
+    INSERT INTO kjat_homloan (acc_no, house_buildyr, hm_ins_accno, yr_ins_prem)
+    VALUES (NEW.acc_no, house_build_year, home_insurance_account, yearly_insurance_premium);
+END;
+
+DELIMITER //
+
+CREATE TRIGGER trg_after_update_loan_request
+AFTER UPDATE ON LoanRequest
+FOR EACH ROW
+BEGIN
+    IF NEW.status = 'approved' THEN
+        CASE
+            WHEN NEW.ltype = 'H' THEN
+                -- Assuming function create_homeloan performs necessary actions
+                CALL create_homeloan(NEW.req_id);
+            WHEN NEW.ltype = 'S' THEN
+                CALL create_stuloan(NEW.req_id);
+            WHEN NEW.ltype = 'P' THEN
+                CALL create_perloan(NEW.req_id);
+        END CASE;
+    END IF;
+END; //
+DELIMITER ;q
