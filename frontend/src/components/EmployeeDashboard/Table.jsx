@@ -12,8 +12,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import SearchBar from "./SearchBar";
+import { Link } from "react-router-dom";
 
-export default function TableComponent({ rows, columns }) {
+export default function TableComponent({ rows, columns, showLink }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -59,11 +60,23 @@ export default function TableComponent({ rows, columns }) {
                       tabIndex={-1}
                       key={row.email}
                     >
-                      {columns.map((column) => {
+                      {columns.map((column, idx) => {
                         const value = row[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {column.renderCell ? column.renderCell(row) : value}
+                            {idx === 0 ? (
+                              showLink ? (
+                                <Link to={`/employee/customer-detail`}>
+                                  {value}
+                                </Link>
+                              ) : (
+                                value
+                              )
+                            ) : column.renderCell ? (
+                              column.renderCell(row)
+                            ) : (
+                              value
+                            )}
                           </TableCell>
                         );
                       })}

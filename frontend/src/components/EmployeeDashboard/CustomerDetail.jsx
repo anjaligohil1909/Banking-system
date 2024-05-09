@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import CardButton from "./CardButton";
-import "./dashboard.css";
+import CardButton from "../CustomerDashboard/CardButton";
+import "../CustomerDashboard/dashboard.css";
 import axios from "axios";
 import { Breadcrumbs, Typography, Divider } from "@mui/material";
 
-function CustomerDashboard() {
+function CustomerDetail() {
   const cust_id = "C0001";
   const [accountDetails, setAccountDetails] = useState([]);
 
@@ -32,7 +32,7 @@ function CustomerDashboard() {
     <>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
         <Typography variant="h4" color="text.primary">
-          Dashboard
+          Customer Detials
         </Typography>
       </Breadcrumbs>
       <Divider />
@@ -48,11 +48,11 @@ function CustomerDashboard() {
         }}
       >
         {accountDetails.map((account, idx) => {
-          return ( <CardButton key={idx} accountDetails={account} showLink={true} />)
+          return ( <CardButton key={idx} accountDetails={account} showLink={false} />)
         })}
       </div>
     </>
   );
 }
 
-export default CustomerDashboard;
+export default CustomerDetail
