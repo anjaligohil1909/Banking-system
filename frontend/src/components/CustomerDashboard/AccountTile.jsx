@@ -35,7 +35,7 @@ function AccountTile({ index, accountDetails }) {
     currency: "USD",
   });
   return (
-    <Card sx={{backgroundColor: "#F0F8FF", maxWidth: 345 }}>
+    <Card sx={{ backgroundColor: "#F0F8FF", maxWidth: 345 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -190,7 +190,7 @@ function AccountTile({ index, accountDetails }) {
             >
               <Typography sx={{ flexGrow: 1 }}>Loan Approved By</Typography>
               <Typography sx={{ flexGrow: 1, textAlign: "right" }}>
-                {accountDetails.loanStartDate}
+                {accountDetails.loanApprovedBy}
               </Typography>
             </Stack>
           </Stack>
