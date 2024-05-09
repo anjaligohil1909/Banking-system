@@ -50,7 +50,7 @@ class Customer(models.Model):
     cust_fname = models.CharField(max_length=20)
     cust_lname = models.CharField(max_length=20, blank=True)
     cust_email = models.EmailField(max_length=200)
-    cust_password = models.CharField(max_length=30)
+    cust_password = models.CharField(max_length=200)
     cust_dob = models.DateTimeField()
     cust_phno = models.BigIntegerField()
     cust_ssn = models.CharField(max_length=9)
