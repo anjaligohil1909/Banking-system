@@ -59,6 +59,9 @@ class TransactionSerializer(serializers.ModelSerializer):
         ]
 
 class LoanSerializer(serializers.ModelSerializer):
+    account = AccountSerializer(read_only=True)
     class Meta:
         model = Loan
-        fields = ['id','lrate','lamount','lmonths','ltype','lpay','acc_no_id']
+        #fields = ['id','lrate','lamount','lmonths','ltype','lpay','acc_no_id','account','date_open']
+        depth = 1
+        fields = '__all__'
