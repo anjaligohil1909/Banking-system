@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CardButton from "./CardButton";
 import "./dashboard.css";
-import { Breadcrumbs, Link, Typography, Divider } from "@mui/material";
+import axios from "axios";
+import { Breadcrumbs, Typography, Divider } from "@mui/material";
+
 function CustomerDashboard() {
+  const cust_id = "C0001";
+
   return (
     <>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>

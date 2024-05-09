@@ -37,7 +37,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['acc_no', 'date_open', 'acc_type', 'cust_id']
+        fields = ['acc_no', 'date_open', 'acc_type', 'cust_id', 'balance', 'routing_no']
         read_only_fields = ['acc_no', 'date_open']  # these fields are not provided by the user
 
     def create(self, validated_data):

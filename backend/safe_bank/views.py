@@ -23,7 +23,7 @@ class AccountOverview(generics.ListAPIView):
         queryset = Account.objects.all()
         cust_id = self.request.query_params.get("cust_id")
         if cust_id is not None:
-            queryset = queryset.filter(cust_id=cust_id, acc_type__in=["C", "Checking"])
+            queryset = queryset.filter(cust_id=cust_id)
         return queryset
 
 
@@ -79,7 +79,8 @@ class TransactionView(generics.ListAPIView):
     def get_queryset(self):
         acc_no = self.kwargs["acc_no"]
         ans = TxnList.objects.filter(sender_no=acc_no) | TxnList.objects.filter(receiver_no=acc_no)
-        return ans
+        queryset = ans.order_by('-datetime')
+        return queryset
 
 
 class RegisterCustomer(APIView):
