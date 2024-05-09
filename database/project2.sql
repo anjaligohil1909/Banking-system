@@ -132,7 +132,7 @@ CREATE TABLE Kjat_loanreq (
     FOREIGN KEY (req_id) REFERENCES kjat_request(req_id) ON DELETE CASCADE
 );
 
-ALTER TABLE kjat_loanreq ADD CONSTRAINT kjat_loanreq_pk PRIMARY KEY ( acc_no );
+ALTER TABLE kjat_loanreq ADD CONSTRAINT kjat_loanreq_pk PRIMARY KEY ( req_id );
 
 CREATE TABLE kjat_homlnreq (
     req_id INT PRIMARY KEY,
@@ -155,15 +155,16 @@ CREATE TABLE kjat_stuloanreq (
 ALTER TABLE kjat_stuloanreq
     ADD CONSTRAINT c_stulonreq_mon CHECK ( smonth BETWEEN 1 AND 12 );
 
-CREATE TABLE PerloanRequest (
+CREATE TABLE kjat_perloanreq (
     req_id INT PRIMARY KEY,
-    credit_score SMALLINT NOT NULL,
     FOREIGN KEY (req_id) REFERENCES loanreq(req_id)
 );
 
 CREATE TABLE kjat_edit_profile (
     req_id INT PRIMARY KEY,
     cust_id VARCHAR(12) NOT NULL,
+    cust_fname VARCHAR(20),
+    cust_lname VARCHAR(20),
     cust_email VARCHAR(200),
     cust_password VARCHAR(30),
     cust_phno BIGINT,
@@ -824,4 +825,4 @@ BEGIN
         END CASE;
     END IF;
 END; //
-DELIMITER ;q
+DELIMITER ;

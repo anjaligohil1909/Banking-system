@@ -26,7 +26,6 @@ class Account(models.Model):
 
     def __str__(self):
         return f"{self.acc_no}"
-
 class Address(models.Model):
     add_id = models.CharField(max_length=12, primary_key=True)
     city = models.CharField(max_length=20)
@@ -62,6 +61,7 @@ class Customer(models.Model):
     cust_password = models.CharField(max_length=30)
     cust_dob = models.DateTimeField()
     cust_phno = models.BigIntegerField()
+    cust_ssn = models.CharField(max_length=9)
 
     def __str__(self):
         return f"{self.cust_id}"
@@ -129,3 +129,85 @@ class TxnList(models.Model):
 
     def __str__(self):
         return f"Transaction {self.txn_id}"
+
+class Request(models.Model):
+    REQUEST_TYPE_CHOICES = [
+        ('loan', 'Loan'),
+        ('profile_edit', 'Profile Edit'),
+        ('transaction', 'Transaction'),
+    ]
+
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    req_id = models.AutoField(primary_key=True)
+    request_type = models.CharField(max_length=20, choices=REQUEST_TYPE_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Request {self.req_id}"
+    
+class LoanRequest(models.Model):
+    req_id = models.ForeignKey('Request', on_delete=models.CASCADE)
+    ltype = models.CharField(max_length=1, choices=[('S', 'Student'), ('P', 'Personal'), ('H', 'Home')])
+    lamount = models.DecimalField(max_digits=9, decimal_places=3)
+    lmonths = models.SmallIntegerField()
+    lpay = models.DecimalField(max_digits=6, decimal_places=2)
+    lrate = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return f"Loan Request {self.req_id.req_id}"
+
+class HomeLoanRequest(models.Model):
+    req_id = models.ForeignKey('LoanRequest', on_delete=models.CASCADE)
+    house_buildyr = models.SmallIntegerField()
+    hm_ins_accno = models.CharField(max_length=12)
+    yr_ins_prem = models.DecimalField(max_digits=7, decimal_places=2)
+    insc_id = models.ForeignKey('InsCmpny', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Home Loan Request {self.req_id.req_id}"
+
+class StudentLoanRequest(models.Model):
+    req_id = models.ForeignKey('LoanRequest', on_delete=models.CASCADE)
+    uni_name = models.CharField(max_length=30)
+    stu_id = models.CharField(max_length=12)
+    slevel = models.CharField(max_length=1, choices=[('G', 'Graduate'), ('U', 'Undergraduate')])
+    smonth = models.SmallIntegerField()
+    syear = models.SmallIntegerField()
+
+    def __str__(self):
+        return f"Student Loan Request {self.req_id.req_id}"
+    
+class PersonalLoanRequest(models.Model):
+    req_id = models.ForeignKey('LoanRequest', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Personal Loan Request {self.req_id.req_id}"
+class ProfileEditRequest(models.Model):
+    req_id = models.ForeignKey('Request', on_delete=models.CASCADE)
+    cust_fname = models.CharField(max_length=20)
+    cust_lname = models.CharField(max_length=20, blank=True)
+    cust_email = models.EmailField(max_length=200)
+    cust_password = models.CharField(max_length=30)
+    cust_dob = models.DateTimeField()
+    cust_phno = models.BigIntegerField()
+    cust_ssn = models.CharField(max_length=9)
+
+    def __str__(self):
+        return f"Profile Edit Request {self.req_id.req_id}" 
+
+class TransactionRequest(models.Model):
+    req_id = models.ForeignKey('Request', on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    datetime = models.DateTimeField()
+    sender_no = models.ForeignKey('Account', related_name='sent_requests', on_delete=models.CASCADE)
+    receiver_no = models.ForeignKey('Account', related_name='received_requests', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Transaction Request {self.req_id.req_id}"
