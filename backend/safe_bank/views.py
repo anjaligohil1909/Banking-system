@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 import json
 from rest_framework.views import APIView
-from .models import Customer, Account, TxnList, Request, Loan, HomeLoanRequest, StudentLoanRequest, PersonalLoanRequest
+from .models import Customer, Account, TxnList, Request, Loan, HomeLoanRequest, StudentLoanRequest, PersonalLoanRequest, LoanRequest, TransactionRequest
 from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, RequestSerializer, RequestSerializer, LoanSerializer, LoanRequestSerializer, HomeLoanRequestSerializer, StudentLoanRequestSerializer, PersonalLoanRequestSerializer, TransactionRequestSerializer, ProfileEditRequestSerializer
 from django.db import transaction
 import uuid, datetime
@@ -72,10 +72,6 @@ class SavingsAccountView(generics.ListAPIView):
 
 
 class TransactionView(generics.ListAPIView):
-    """
-    API endpoint to allow users to view checking account details
-    """
-
     serializer_class = TransactionSerializer
 
     def get_queryset(self):
@@ -83,6 +79,57 @@ class TransactionView(generics.ListAPIView):
         ans = TxnList.objects.filter(sender_no=acc_no) | TxnList.objects.filter(receiver_no=acc_no)
         queryset = ans.order_by('-datetime')
         return queryset
+
+class RequestViewWithID(generics.ListAPIView):
+    serializer_class = RequestSerializer
+
+    def get_queryset(self):
+        queryset = Request.objects.all()
+        req_id = self.kwargs["req_id"]
+        if req_id is not None:
+            queryset = queryset.filter(req_id=req_id)
+        return queryset
+
+class LoanRequestView(generics.ListAPIView):
+    serializer_class = LoanRequestSerializer
+    def get_queryset(self):
+        queryset = LoanRequest.objects.all()
+        return queryset
+
+class TransactionRequestView(generics.ListAPIView):
+    serializer_class = TransactionRequestSerializer
+    def get_queryset(self):
+        queryset = TransactionRequest.objects.all()
+        return queryset
+
+# class EditTransactionRequestView(generics.ListAPIView):
+#     def put(self,request):
+#         serializer_class = AccountSerializer
+#         amount = float(request.data.get('amount1'))
+#         receiver_no = request.data.get('toaccno')
+#         sender_no = request.data.get('fromaccno')
+
+#         queryset = Account.objects.all()
+#         queryset2 = queryset.filter(acc_no=sender_no)
+#         print(queryset2)
+
+#         if(queryset.balance >= amount):
+#             queryset.balance = balance - amount
+#             sender_account_serializer = AccountSerializer(data=queryset) 
+#             if sender_account_serializer.is_valid(): 
+#                 sender_account_serializer.save() 
+#             querysetrec = Account.objects.filter(acc_no=receiver_no).first()
+#             querysetrec.balance = balance + amount
+#             receiver_account_serializer = AccountSerializer(data=querysetrec) 
+#             if receiver_account_serializer.is_valid(): 
+#                 receiver_account_serializer.save() 
+#             else:
+#                 return Response(receiver_account_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         else:
+#                 return Response(sender_account_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        
+        
 
 
 class RegisterCustomer(APIView):
@@ -138,6 +185,9 @@ class CustomerLoansView(generics.GenericAPIView):
 class RequestView(generics.ListAPIView):
     queryset = Request.objects.all()
     serializer_class = RequestSerializer
+
+
+
 
 class CreateRequest(APIView):
     def post(self, request):
