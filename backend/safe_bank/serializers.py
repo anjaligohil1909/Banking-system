@@ -121,6 +121,3 @@ class TransactionRequestSerializer(serializers.ModelSerializer):
     # def validate_balance(self, value):
     #     if value > Balance:
     #         raise serializers.ValidationError("Insufficient balance.")
-
-
-
