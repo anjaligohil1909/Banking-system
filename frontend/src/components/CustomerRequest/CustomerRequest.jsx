@@ -133,9 +133,9 @@ export default function CustomerRequest() {
 			if (requestType=="loan"&& loanType=="P"){
 				const formData = {
 					request_type: requestType,
-					status: "Pending",
-					cust_id: "C0006",
-					created_at: "2023-05-09T09:15:00.000Z",
+					// status: "Pending",
+					cust_id: "001",
+					// created_at: "2023-05-09T09:15:00.000Z",
 					ltype:loanType,
 					lamount:parseInt(loanAmt),
 					lmonths:term*12,
@@ -151,7 +151,7 @@ export default function CustomerRequest() {
 				const formData = {
 					request_type: requestType,
 					status: "Pending",
-					cust_id: "C0006",
+					cust_id: "001",
 					created_at: "2023-05-09T09:15:00.000Z",
 					ltype:loanType,
 					lamount:parseInt(loanAmt),
@@ -161,8 +161,8 @@ export default function CustomerRequest() {
 					uni_name:uName,
 					stu_id:uID,
 					slevel:degreeType,
-					smonth:gradDate.slice(-2),
-					syear:gradDate.slice(0,4),
+					smonth:parseInt(gradDate.slice(-2)),
+					syear:parseInt(gradDate.slice(0,4)),
 
 				};
 				const responseData = await submitFormData(formData);
@@ -173,7 +173,7 @@ export default function CustomerRequest() {
 				const formData = {
 					request_type: requestType,
 					status: "Pending",
-					cust_id: "C0006",
+					cust_id: "001",
 					created_at: "2023-05-09T09:15:00.000Z",
 					ltype:loanType,
 					lamount:parseInt(loanAmt),
@@ -194,12 +194,12 @@ export default function CustomerRequest() {
 				const formData = {
 					request_type: requestType,
 					status: "Pending",
-					cust_id: "C0006",
-					created_at: "2023-05-09T09:15:00.000Z",
+					cust_id: "001",
+					// created_at: "2023-05-09T09:15:00.000Z",
 					amount:transactionAmount,
-					sender_no:"C0006",
+					sender_no:"001",
 					receiver_no:acctNo,
-					datetime:"2023-05-09T09:15:00.000Z",
+					// datetime:"2023-05-09T09:15:00.000Z",
 
 				};
 				const responseData = await submitFormData(formData);
@@ -543,20 +543,6 @@ export default function CustomerRequest() {
 							>
 								Request
 							</Button>
-							{console.log(transactionAmount)}
-							{console.log(acctNo)}
-							{console.log(salutation)}
-							{console.log(fname)}
-							{console.log(lname)}
-							{console.log(email)}
-							{console.log(phno)}
-							{console.log(loanAmt)}
-							{console.log(term)}
-							{console.log(loanType)}
-							{console.log(degreeType)}
-							{console.log(uID)}
-							{console.log(uName)}
-							{console.log(gradDate)}
 
 							<Button variant="outlined" color="error">
 								Reset
