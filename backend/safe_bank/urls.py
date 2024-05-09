@@ -10,7 +10,6 @@ urlpatterns = [
     path('api/customer/<str:customer_id>/saving-account/', SavingsAccountView.as_view(), name='savings-details'),
     path('api/customer/<str:acc_no>/transactions', TransactionView.as_view(), name='transaction-details'),
     path('api/register/', RegisterCustomer.as_view(), name='register_customer'),
-    path('api/loans/<customer_id>', CustomerLoansView.as_view(), name='loansView '),
+    path('api/loans/<customer_id>', CustomerLoansView.as_view(), name='customerLoans '),
     path('api/loans/', LoansView.as_view(), name='loansView ')
-
 ]
