@@ -5,11 +5,11 @@ import axios from "axios";
 import { Breadcrumbs, Typography, Divider } from "@mui/material";
 
 function CustomerDetail() {
-  const cust_id = "C0001";
+  const [custId, setCustId] = useState(localStorage.getItem('cust_id') || 'defaultCustId');
   const [accountDetails, setAccountDetails] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/accounts/?cust_id=${cust_id}`)
+    axios.get(`http://127.0.0.1:8000/api/accounts/?cust_id=${custId}`)
       .then((res) => {
         console.log(res);
         const newData = res.data.map((acc) => {

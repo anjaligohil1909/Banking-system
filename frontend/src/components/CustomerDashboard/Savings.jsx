@@ -14,13 +14,14 @@ import { useNavigate } from "react-router-dom";
 
 function Savings() {
   const navigate = useNavigate();
-  const cust_id = "C0001";
+  const [custId, setCustId] = useState(localStorage.getItem('cust_id') || 'defaultCustId');
   const [accountDetails, setAccountDetails] = useState([{}]);
   const [transactionDetails, setTransactionDetails] = useState([{}]);
 
+  
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/customer/${cust_id}/saving-account/`)
+      .get(`http://127.0.0.1:8000/api/customer/${custId}/saving-account/`)
       .then((res) => {
         console.log(res);
         setAccountDetails(res.data);

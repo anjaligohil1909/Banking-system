@@ -17,10 +17,10 @@ import Dummy from "./Dummy";
 import moment from "moment";
 
 function Loan(props) {
-  const cust_id = "C0002";
+  const [custId, setCustId] = useState(localStorage.getItem('cust_id') || 'defaultCustId');
   const [accountDetails, setAccountDetails] = useState([]);
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/loans/${cust_id}`).then((res) => {
+    axios.get(`http://127.0.0.1:8000/api/loans/${custId}`).then((res) => {
       console.log(res.data);
       const loanStartDate = moment(res.data.acc_no.date_open, "YYYY-MM-DD");
 
