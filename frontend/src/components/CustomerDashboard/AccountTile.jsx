@@ -64,7 +64,7 @@ function AccountTile({ index, accountDetails }) {
               color="text.secondary"
               sx={{ flexGrow: 1, textAlign: "right" }}
             >
-              {accountDetails.intRate * 100 + "%"}
+              {(accountDetails.intRate * 100).toFixed(2) + "%"}
             </Typography>
           </Stack>
           <Stack

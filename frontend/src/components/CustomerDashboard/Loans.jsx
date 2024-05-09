@@ -17,7 +17,7 @@ import Dummy from "./Dummy";
 import moment from "moment";
 
 function Loan(props) {
-  const cust_id = "C0001";
+  const cust_id = "C0002";
   const [accountDetails, setAccountDetails] = useState([]);
   useEffect(() => {
     axios.get(`http://127.0.0.1:8000/api/loans/${cust_id}`).then((res) => {
@@ -29,7 +29,6 @@ function Loan(props) {
         .clone()
         .add(1, "months")
         .format("MM/DD/YYYY");
-      debugger;
       let acct = {
         id: res.data.id,
         accountType: res.data.ltype,
@@ -43,36 +42,9 @@ function Loan(props) {
         loanStartDate: loanStartDate.format("MM/DD/YYYY"),
         loanApprovedBy: "User ABC",
       };
-      debugger;
       setAccountDetails([acct]);
     });
   }, []);
-  // const accountDetails = [
-  //   {
-  //     accountType: "Personal",
-  //     accountNumber: 123456,
-  //     principalAmt: 100000,
-  //     intRate: 0.065,
-  //     term: "5 years",
-  //     maturityDate: "12/31/2029",
-  //     nextPaymentDate: "5/31/2025",
-  //     installmentAmt: 500,
-  //     loanStartDate: "1/1/2024",
-  //     loanApprovedBy: "User ABC",
-  //   },
-  //   // {
-  //   //   accountType: "Home",
-  //   //   accountNumber: 13579,
-  //   //   principalAmt: 1000000,
-  //   //   intRate: 0.075,
-  //   //   term: "30 years",
-  //   //   maturityDate: "12/31/2054",
-  //   //   nextPaymentDate: "5/31/2025",
-  //   //   installmentAmt: 2500,
-  //   //   loanStartDate: "1/1/2024",
-  //   //   loanApprovedBy: "User XYZ",
-  //   // },
-  // ];
   return (
     <>
       <Breadcrumbs aria-label="breadcrumb" mb={2}>
