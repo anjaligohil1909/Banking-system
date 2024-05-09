@@ -67,6 +67,7 @@ class RequestSerializer(serializers.ModelSerializer):
         def create(self, validated_data):
             request = Request.objects.create(**validated_data)
             return request
+            
 class LoanSerializer(serializers.ModelSerializer):
     account = AccountSerializer(read_only=True)
     class Meta:
@@ -77,8 +78,8 @@ class LoanSerializer(serializers.ModelSerializer):
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
-        fields = ['req_id', 'request_type', 'status', 'created_at', 'cust_id']
-        read_only_fields = ['req_id', 'created_at', 'status']
+        fields = ['request_type', 'status', 'created_at', 'cust_id']
+        read_only_fields = ['created_at', 'status']
 
         def create(self, validated_data):
             request = Request.objects.create(**validated_data)

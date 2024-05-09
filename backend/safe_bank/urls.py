@@ -2,7 +2,7 @@ from django.urls import path
 from .views import AccountOverview, CustomerList, CheckingAccountView, SavingsAccountView, TransactionView, \
     RegisterCustomer, LoansView, CustomerLoansView
 
-from .views import AccountOverview, CustomerList, CheckingAccountView, SavingsAccountView, TransactionView, RegisterCustomer, RequestView, CreateRequest, RequestView, CreateRequest
+from .views import AccountOverview, CustomerList, CheckingAccountView, SavingsAccountView, TransactionView, RegisterCustomer, RequestView, CreateRequest
 
 urlpatterns = [
     path('api/accounts/', AccountOverview.as_view(), name='account-overview'),
@@ -15,6 +15,4 @@ urlpatterns = [
     path('api/customer/create_request/', CreateRequest.as_view(), name='create-request'),
     path('api/loans/<customer_id>', CustomerLoansView.as_view(), name='customerLoans '),
     path('api/loans/', LoansView.as_view(), name='loansView '),
-    path('api/employee/request/', RequestView.as_view(), name='request-list'),
-    path('api/customer/create_request/', CreateRequest.as_view(), name='create-request')
 ]
