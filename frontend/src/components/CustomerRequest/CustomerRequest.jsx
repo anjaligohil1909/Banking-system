@@ -75,13 +75,14 @@ export default function CustomerRequest() {
 					>
 						<MenuItem value={"Loan"}>Request loan</MenuItem>
 						<MenuItem value={"Transaction"}>Make a transaction</MenuItem>
-						<MenuItem value={"Name"}>Change name</MenuItem>
+						{/* <MenuItem value={"Name"}>Change name</MenuItem>
 						<MenuItem value={"Phone"}>Change mobile number</MenuItem>
 						<MenuItem value={"Email"}>Change email address</MenuItem>
-						<MenuItem value={"Address"}>Change address</MenuItem>
+						<MenuItem value={"Address"}>Change address</MenuItem> */}
+						<MenuItem value={"Personal"}>Edit personal details</MenuItem>
 					</Select>
 				</FormControl>
-				{requestType == "Name" ? (
+				{requestType == "Personal" ? (
 					<>
 						<FormControl
 							style={{ width: "250px", margin: "8px", display: "block" }}
@@ -119,7 +120,7 @@ export default function CustomerRequest() {
 					</>
 				) : null}
 
-				{requestType == "Email" ? (
+				{requestType == "Personal" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
@@ -130,7 +131,7 @@ export default function CustomerRequest() {
 						</FormControl>
 					</>
 				) : null}
-				{requestType == "Phone" ? (
+				{requestType == "Personal" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
@@ -157,7 +158,7 @@ export default function CustomerRequest() {
 						</FormControl>
 					</>
 				) : null}
-				{requestType == "Address" ? (
+				{requestType == "Personal" ? (
 					<>
 						<FormControl sx={{ display: "inline", width: "100%" }}>
 							<TextField
