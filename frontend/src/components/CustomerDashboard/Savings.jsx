@@ -18,6 +18,7 @@ function Savings() {
   const [accountDetails, setAccountDetails] = useState([{}]);
   const [transactionDetails, setTransactionDetails] = useState([{}]);
 
+  
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/customer/${custId}/saving-account/`)
