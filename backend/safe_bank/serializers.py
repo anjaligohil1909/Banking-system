@@ -57,17 +57,6 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = [
             'txn_id','amount', 'datetime', 'sender_no', 'receiver_no' 
         ]
-
-class RequestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Request
-        fields = ['req_id', 'request_type', 'status', 'created_at', 'cust_id']
-        read_only_fields = ['req_id', 'created_at', 'status']
-
-        def create(self, validated_data):
-            request = Request.objects.create(**validated_data)
-            return request
-            
 class LoanSerializer(serializers.ModelSerializer):
     account = AccountSerializer(read_only=True)
     class Meta:
@@ -78,8 +67,8 @@ class LoanSerializer(serializers.ModelSerializer):
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
-        fields = ['request_type', 'status', 'created_at', 'cust_id']
-        read_only_fields = ['created_at', 'status']
+        fields = ['req_id', 'created_at', 'status', 'request_type', 'cust_id']
+        read_only_fields = ['req_id', 'created_at', 'status']
 
         def create(self, validated_data):
             request = Request.objects.create(**validated_data)
@@ -93,6 +82,7 @@ class HomeLoanRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = HomeLoanRequest
         fields = ['req_id', 'house_buildyr', 'hm_ins_accno', 'yr_ins_prem', 'insc_id']
+
 
 class StudentLoanRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -113,6 +103,15 @@ class TransactionRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionRequest
         fields = ['req_id', 'amount', 'datetime', 'sender_no', 'receiver_no']
+    
+    # def validate_amount(self, value):
+    #     if value < 0:
+    #         raise serializers.ValidationError("Amount cannot be negative.")
+    #     return value
+    
+    # def validate_balance(self, value):
+    #     if value > Balance:
+    #         raise serializers.ValidationError("Insufficient balance.")
 
 
 
