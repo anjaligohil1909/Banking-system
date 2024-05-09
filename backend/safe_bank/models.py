@@ -21,7 +21,7 @@ class Account(models.Model):
     date_open = models.DateTimeField(auto_now_add=True)
     acc_type = models.CharField(max_length=1, choices=[('C', 'Checking'), ('S', 'Savings'), ('L', 'Loan')])
     cust_id = models.ForeignKey('Customer', on_delete=models.CASCADE)
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=3000)
     routing_no = models.BigIntegerField(default=100220110)
 
     def __str__(self):

@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'allauth', # for user authentication
+    'allauth.account',
+    'allauth.socialaccount',
     "safe_bank",
+    "corsheaders"
     "rest_framework"
 ]
 
@@ -49,6 +53,14 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware"
+    # Add the account middleware:
+    "allauth.account.middleware.AccountMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -64,12 +76,19 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = "backend.wsgi.application"
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 
 # Database
@@ -89,7 +108,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'safe_bank',
         'USER': 'root',
-        'PASSWORD': '', # remove password if you haven't set one
+        'PASSWORD': 'password', # remove password if you haven't set one
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
@@ -118,11 +137,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-...
-ALLOWED_HOSTS = ['*']
-...
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

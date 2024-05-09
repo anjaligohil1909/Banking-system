@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import CardButton from "./CardButton";
 import {
   Box,
@@ -11,41 +12,77 @@ import {
 import TableComponent from "../EmployeeDashboard/Table";
 import { useNavigate } from "react-router-dom";
 
-function Checkings(props) {
-  const { accountNum, routingNum, balance } = props;
+function Checkings() {
   const navigate = useNavigate();
+  const cust_id = "C0001";
+  const [accountDetails, setAccountDetails] = useState([{}]);
+  const [transactionDetails, setTransactionDetails] = useState([{}]);
+
+  useEffect(() => {
+    axios
+      .get(`http://127.0.0.1:8000/api/customer/${cust_id}/checkings-account/`)
+      .then((res) => {
+        console.log(res);
+        setAccountDetails(res.data);
+        if (res.data.length != 0) {
+          axios
+            .get(
+              `http://127.0.0.1:8000/api/customer/${res.data[0].acc_no}/transactions`
+            )
+            .then((transactionData) => {
+              console.log(transactionData.data);
+              if (transactionData.data.length != 0) {
+                const newTransactions = transactionData.data.map(
+                  (transaction) => {
+                    if (transaction.sender_no === res.data[0].acc_no) {
+                      transaction.type = "Debit";
+                      transaction.acc = transaction.receiver_no;
+                    } else {
+                      transaction.type = "Credit";
+                      transaction.acc = transaction.sender_no;
+                    }
+                    return transaction;
+                  }
+                );
+                setTransactionDetails(newTransactions);
+              }
+            });
+        }
+      });
+  }, []);
+
   const columns = [
     {
-      id: "receivingacc",
-      label: "Receiving Account No",
+      id: "transactiontype",
+      label: "Transaction Type",
       align: "center",
       maxWidth: 80,
     },
     {
-      id: "receivername",
-      label: "Receiver Name",
+      id: "receivingacc",
+      label: "To/From",
       align: "center",
       maxWidth: 80,
     },
     { id: "amount", label: "Amount Sent($)", align: "center", maxWidth: 80 },
   ];
 
-  function createData(receivingacc, receivername, amount) {
-    return { receivingacc, receivername, amount };
-  }
 
-  const rows = [
-    createData(3451234325, "Anjali", 30),
-    createData(4567890123, "John", 50),
-    createData(5678901234, "Emily", 20),
-    createData(6789012345, "David", 40),
-    createData(7890123456, "Sarah", 60),
-    createData(8901234567, "Michael", 25),
-    createData(9012345678, "Alice", 35),
-    createData(1234567890, "Bob", 45),
-    createData(2345678901, "Olivia", 55),
-    createData(3456789012, "James", 65),
-  ];
+
+  let rows = [];
+
+  function formatData() {
+		rows = transactionDetails.map(({ type, acc, amount }) => {
+			const createData = (transactiontype, receivingacc, amount) => ({
+				transactiontype,
+				receivingacc,
+				amount
+			});
+
+			return createData(type, acc, amount);
+		});
+		console.log(rows);
+	}
 
   return (
     <Box className="">
@@ -69,10 +106,10 @@ function Checkings(props) {
           >
             <CardContent>
               <Typography gutterBottom variant="h6">
-                Account Number: 123456789
+                Account Number: {accountDetails[0].acc_no}
               </Typography>
               <Typography gutterBottom variant="h6">
-                Routing Number: 6784567090
+                Routing Number: 100220110
               </Typography>
               {/* <Typography gutterBottom variant="h6">Account Number: {accountNum} </Typography> */}
               {/* <Typography gutterBottom variant="h6">Routing Number: {routingNum} </Typography> */}
@@ -107,7 +144,9 @@ function Checkings(props) {
           }}
         >
           <h3 style={{ margin: 0 }}> Recent Transactions </h3>
+          {transactionDetails? formatData(): null}
           <TableComponent rows={rows} columns={columns} />
+          
         </div>
       </div>
     </Box>
