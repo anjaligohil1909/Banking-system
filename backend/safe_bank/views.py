@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
@@ -116,3 +117,19 @@ class LoansView(generics.ListAPIView):
         if loan_id is not None:
             queryset = queryset.filter(id=loan_id)
         return queryset;
+
+class CustomerLoansView(generics.GenericAPIView):
+    def get_loanByAccount(self, accountNo):
+        try:
+            return Loan.objects.get(acc_no=accountNo)
+        except Loan.DoesNotExist:
+            raise Http404
+
+    def get_loanaccount(selfself, customer_id):
+        return Account.objects.get(cust_id=customer_id,acc_type='L')
+
+    def get(self, request, customer_id):
+        accountObj = self.get_loanaccount(customer_id)
+        loanObj = self.get_loanByAccount(accountObj.acc_no)
+        serializer = LoanSerializer(loanObj)
+        return Response(serializer.data)
