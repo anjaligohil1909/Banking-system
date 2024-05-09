@@ -108,9 +108,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'safe_bank',
         'USER': 'root',
-        'PASSWORD': '', # remove password if you haven't set one
+        'PASSWORD': 'password', # remove password if you haven't set one
         'HOST': 'localhost',
-        'PORT': '3308',
+        'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
