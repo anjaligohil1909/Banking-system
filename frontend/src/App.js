@@ -21,7 +21,7 @@ const employeeSideBarList = {
   "New Account": "new-account",
   "Loan Requests": "loan-requests",
   "Transaction Requests": "transaction-requests",
-  "Profile Edit Requests": "profile-edit-requests",
+  // "Profile Edit Requests": "profile-edit-requests",
 };
 
 const customersSideBarList = {

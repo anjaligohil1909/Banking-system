@@ -278,7 +278,7 @@ export default function CustomerRequest() {
 						<MenuItem value={"Phone"}>Change mobile number</MenuItem>
 						<MenuItem value={"Email"}>Change email address</MenuItem>
 						<MenuItem value={"Address"}>Change address</MenuItem> */}
-						<MenuItem value={"profile_edit"}>Edit personal details</MenuItem>
+						{/* <MenuItem value={"profile_edit"}>Edit personal details</MenuItem> */}
 					</Select>
 				</FormControl>
 				{requestType == "profile_edit" ? (
