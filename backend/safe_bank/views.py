@@ -4,8 +4,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from .models import Customer, Account, TxnList, Loan
+from .models import Customer, Account, TxnList, Request, Loan
 from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, LoanSerializer
+from .models import Customer, Account, TxnList, Request
+from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, RequestSerializer, RequestSerializer
 
 import uuid, datetime
 
@@ -108,6 +110,27 @@ class RegisterCustomer(APIView):
         else:
             return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class RequestView(generics.ListAPIView):
+    """
+    API endpoint to allow users to view checking account details
+    """
+    queryset = Request.objects.all()
+    serializer_class = RequestSerializer
+
+class CreateRequest(APIView):
+    def post(self, request):
+        request_data = request.data
+        request_serializer = RequestSerializer(data=request_data)
+        if request_serializer.is_valid():
+            request = request_serializer.save()
+            return Response({
+                'request': request_serializer.data
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response(request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class LoansView(generics.ListAPIView):
     serializer_class = LoanSerializer
     def get_queryset(self):
@@ -133,3 +156,21 @@ class CustomerLoansView(generics.GenericAPIView):
         loanObj = self.get_loanByAccount(accountObj.acc_no)
         serializer = LoanSerializer(loanObj)
         return Response(serializer.data)
+class RequestView(generics.ListAPIView):
+    """
+    API endpoint to allow users to view checking account details
+    """
+    queryset = Request.objects.all()
+    serializer_class = RequestSerializer
+
+class CreateRequest(APIView):
+    def post(self, request):
+        request_data = request.data
+        request_serializer = RequestSerializer(data=request_data)
+        if request_serializer.is_valid():
+            request = request_serializer.save()
+            return Response({
+                'request': request_serializer.data
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response(request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
