@@ -154,10 +154,8 @@ class CustomerLoansView(generics.GenericAPIView):
         loanObj = self.get_loanByAccount(accountObj.acc_no)
         serializer = LoanSerializer(loanObj)
         return Response(serializer.data)
+
 class RequestView(generics.ListAPIView):
-    """
-    API endpoint to allow users to view checking account details
-    """
     queryset = Request.objects.all()
     serializer_class = RequestSerializer
 
