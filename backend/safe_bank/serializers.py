@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, Address, Customer, TxnList
+from .models import Account, Address, Customer, TxnList, Loan
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,3 +57,8 @@ class TransactionSerializer(serializers.ModelSerializer):
         fields = [
             'txn_id','amount', 'datetime', 'sender_no', 'receiver_no' 
         ]
+
+class LoanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Loan
+        fields = ['id','lrate','lamount','lmonths','ltype','lpay','acc_no_id']
