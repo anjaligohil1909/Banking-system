@@ -35,9 +35,14 @@ export default function CustomerRequest() {
 	const [builtYear, setbuiltYear] = useState("");
 	const [insAcctNo, setinsAcctNo] = useState("");
 	const [insYearly, setinsYearly] = useState("");
+	const [insName, setinsName] = useState("");
 
 	const handleSalutationChange = (event) => {
 		setSalutation(event.target.value);
+	};
+
+	const handleinsNameChange = (event) => {
+		setinsName(event.target.value);
 	};
 
 	const handlefnameChange = (event) => {
@@ -124,25 +129,105 @@ export default function CustomerRequest() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		// fields = ['req_id', 'request_type', 'status', 'created_at', 'cust_id']
-		// fields = ['req_id', 'ltype', 'lamount', 'lmonths', 'lpay', 'lrate']
-
 		try {
-			const formData = {
-				request_type: requestType,
-				status: "Pending",
-				cust_id: "C0006",
-				created_at: "2023-05-09T09:15:00.000Z",
-				ltype:loanType,
-				lamount:loanAmt,
-				lmonths:term*12,
-				lpay:500.00,
-				lrate:6.00,
+			if (requestType=="loan"&& loanType=="P"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "C0006",
+					created_at: "2023-05-09T09:15:00.000Z",
+					ltype:loanType,
+					lamount:parseInt(loanAmt),
+					lmonths:term*12,
+					lpay:500.00,
+					lrate:6.00,
 
-			};
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
 
-			const responseData = await submitFormData(formData);
-			console.log("Response:", responseData);
+			if (requestType=="loan" && loanType=="S"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "C0006",
+					created_at: "2023-05-09T09:15:00.000Z",
+					ltype:loanType,
+					lamount:parseInt(loanAmt),
+					lmonths:term*12,
+					lpay:500.00,
+					lrate:6.00,
+					uni_name:uName,
+					stu_id:uID,
+					slevel:degreeType,
+					smonth:gradDate.slice(-2),
+					syear:gradDate.slice(0,4),
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+			if (requestType=="loan" && loanType=="H"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "C0006",
+					created_at: "2023-05-09T09:15:00.000Z",
+					ltype:loanType,
+					lamount:parseInt(loanAmt),
+					lmonths:term*12,
+					lpay:500.00,
+					lrate:6.00,
+					house_buildyr:builtYear,
+					hm_ins_accno:insAcctNo,
+					yr_ins_prem:insYearly,
+					insc_id:insName,
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+			if (requestType=="transaction"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "C0006",
+					created_at: "2023-05-09T09:15:00.000Z",
+					amount:transactionAmount,
+					sender_no:"C0006",
+					receiver_no:acctNo,
+					datetime:"2023-05-09T09:15:00.000Z",
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+			if (requestType=="profile_edit"){
+				const formData = {
+					request_type: requestType,
+					status: "Pending",
+					cust_id: "C0006",
+					created_at: "2023-05-09T09:15:00.000Z",
+					cust_fname:fname,
+					cust_lname:lname,
+					cust_email:email,
+					cust_phno:phno,
+					cust_password:" ",
+					cust_dob:"",
+					cust_ssn:"",
+
+				};
+				const responseData = await submitFormData(formData);
+				console.log("Response:", responseData);
+			}
+
+		
+
+			
 
 			// Reset form data or perform any other actions after successful submission
 		} catch (error) {
@@ -187,16 +272,16 @@ export default function CustomerRequest() {
 						onChange={handleRequestTypeChange}
 						required
 					>
-						<MenuItem value={"Loan"}>Request loan</MenuItem>
-						<MenuItem value={"Transaction"}>Make a transaction</MenuItem>
+						<MenuItem value={"loan"}>Request loan</MenuItem>
+						<MenuItem value={"transaction"}>Make a transaction</MenuItem>
 						{/* <MenuItem value={"Name"}>Change name</MenuItem>
 						<MenuItem value={"Phone"}>Change mobile number</MenuItem>
 						<MenuItem value={"Email"}>Change email address</MenuItem>
 						<MenuItem value={"Address"}>Change address</MenuItem> */}
-						<MenuItem value={"Personal"}>Edit personal details</MenuItem>
+						<MenuItem value={"profile_edit"}>Edit personal details</MenuItem>
 					</Select>
 				</FormControl>
-				{requestType == "Personal" ? (
+				{requestType == "profile_edit" ? (
 					<>
 						<FormControl
 							style={{ width: "250px", margin: "8px", display: "block" }}
@@ -238,7 +323,7 @@ export default function CustomerRequest() {
 					</>
 				) : null}
 
-				{requestType == "Personal" ? (
+				{requestType == "profile_edit" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
@@ -251,7 +336,7 @@ export default function CustomerRequest() {
 						</FormControl>
 					</>
 				) : null}
-				{requestType == "Personal" ? (
+				{requestType == "profile_edit" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
@@ -264,7 +349,7 @@ export default function CustomerRequest() {
 						</FormControl>
 					</>
 				) : null}
-				{requestType == "Transaction" ? (
+				{requestType == "transaction" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
@@ -301,7 +386,7 @@ export default function CustomerRequest() {
 						</FormControl>
 					</>
 				) : null} */}
-				{requestType == "Loan" ? (
+				{requestType == "loan" ? (
 					<>
 						<FormControl sx={{ display: "block", width: "100%" }}>
 							<TextField
@@ -354,7 +439,8 @@ export default function CustomerRequest() {
 								</Typography>
 
 								<FormControl sx={{ display: "block", width: "100%" }}>
-									<TextField required type="text" label="Name"></TextField>
+									<TextField required type="text" label="Name" value={insName}
+										onChange={handleinsNameChange}></TextField>
 								</FormControl>
 								<FormControl sx={{ display: "block", width: "100%" }}>
 									<TextField
