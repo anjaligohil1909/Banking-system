@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from .models import Customer, Account, TxnList, Request, Loan, HomeLoanRequest, StudentLoanRequest, PersonalLoanRequest
-from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, RequestSerializer, RequestSerializer, LoanSerializer, LoanRequestSerializer, HomeLoanRequestSerializer, StudentLoanRequestSerializer, PersonalLoanRequestSerializer
-
+from .serializers import CustomerSerializer, AccountSerializer, TransactionSerializer, RequestSerializer, RequestSerializer, LoanSerializer, LoanRequestSerializer, HomeLoanRequestSerializer, StudentLoanRequestSerializer, PersonalLoanRequestSerializer, TransactionRequestSerializer, ProfileEditRequestSerializer
+from django.db import transaction
 import uuid, datetime
 
 class AccountOverview(generics.ListAPIView):
@@ -108,27 +108,6 @@ class RegisterCustomer(APIView):
         else:
             return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class RequestView(generics.ListAPIView):
-    """
-    API endpoint to allow users to view checking account details
-    """
-    queryset = Request.objects.all()
-    serializer_class = RequestSerializer
-
-class CreateRequest(APIView):
-    def post(self, request):
-        request_data = request.data
-        request_serializer = RequestSerializer(data=request_data)
-        if request_serializer.is_valid():
-            request = request_serializer.save()
-            return Response({
-                'request': request_serializer.data
-            }, status=status.HTTP_201_CREATED)
-        else:
-            return Response(request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
 class LoansView(generics.ListAPIView):
     serializer_class = LoanSerializer
     def get_queryset(self):
@@ -166,82 +145,115 @@ class CreateRequest(APIView):
         request_data = request.data
         request_type = request_data.get('request_type')
 
-        if request_type == 'loan':
-            request_serializer = RequestSerializer(data=request_data)
-            if request_serializer.is_valid():
-                request = request_serializer.save()
-                loan_request_data = {
-                    'req_id': request.req_id,
-                    **request_data.get('loan_request', {})
-                }
-                loan_request_serializer = LoanRequestSerializer(data=loan_request_data)
-                if loan_request_serializer.is_valid():
-                    loan_request = loan_request_serializer.save()
-                    if request_data.get('loan_type') == 'H':
-                        home_loan_request_data = {
-                            'req_id': loan_request.req_id,
-                            **request_data.get('home_loan_request', {})
-                        }
-                        home_loan_request_serializer = HomeLoanRequestSerializer(data=home_loan_request_data)
-                        if home_loan_request_serializer.is_valid():
-                            home_loan_request_serializer.save()
-                        else:
-                            return Response(home_loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                    elif request_data.get('loan_type') == 'S':
-                        student_loan_request_data = {
-                            'req_id': loan_request.req_id,
-                            **request_data.get('student_loan_request', {})
-                        }
-                        student_loan_request_serializer = StudentLoanRequestSerializer(data=student_loan_request_data)
-                        if student_loan_request_serializer.is_valid():
-                            student_loan_request_serializer.save()
-                        else:
-                            return Response(student_loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                    elif request_data.get('loan_type') == 'P':
-                        personal_loan_request_data = {
-                            'req_id': loan_request.req_id,
-                            **request_data.get('personal_loan_request', {})
-                        }
-                        personal_loan_request_serializer = PersonalLoanRequestSerializer(data=personal_loan_request_data)
-                        if personal_loan_request_serializer.is_valid():
-                            personal_loan_request_serializer.save()
-                        else:
-                            return Response(personal_loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response(loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response(request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        elif request_type == 'profile_edit':
-            request_serializer = RequestSerializer(data=request_data)
-            if request_serializer.is_valid():
-                request = request_serializer.save()
-                profile_edit_request_data = {
-                    'req_id': request.req_id,
-                    **request_data.get('profile_edit_request', {})
-                }
-                profile_edit_request_serializer = ProfileEditRequestSerializer(data=profile_edit_request_data)
-                if profile_edit_request_serializer.is_valid():
-                    profile_edit_request_serializer.save()
-                else:
-                    return Response(profile_edit_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response(request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        elif request_type == 'transaction':
-            request_serializer = RequestSerializer(data=request_data)
-            if request_serializer.is_valid():
-                request = request_serializer.save()
-                transaction_request_data = {
-                    'req_id': request.req_id,
-                    **request_data.get('transaction_request', {})
-                }
-                transaction_request_serializer = TransactionRequestSerializer(data=transaction_request_data)
-                if transaction_request_serializer.is_valid():
-                    transaction_request_serializer.save()
-                else:
-                    return Response(transaction_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response(request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({'error': 'Invalid request type'}, status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            # Create the main Request instance first
+            main_request = self.create_main_request(request_data)
 
-        return Response({'request': request_serializer.data}, status=status.HTTP_201_CREATED)
+            if main_request is None:
+                return Response({'error': 'Failed to create main request'}, status=status.HTTP_400_BAD_REQUEST)
+
+            if request_type == 'loan':
+                return self.handle_loan_request(request_data, main_request)
+            elif request_type == 'profile_edit':
+                return self.handle_profile_edit_request(request_data, main_request)
+            elif request_type == 'transaction':
+                return self.handle_transaction_request(request_data, main_request)
+            else:
+                return Response({'error': 'Invalid request type'}, status=status.HTTP_400_BAD_REQUEST)
+
+    def create_main_request(self, data):
+        # Assume Customer serializer and validation are handled appropriately
+        request_serializer = RequestSerializer(data=data)
+        if request_serializer.is_valid():
+            return request_serializer.save()
+        return None
+
+    def handle_loan_request(self, request_data, main_request):
+        loan_request_data = request_data
+        loan_request_data['req_id'] = main_request.req_id  # Link to main request
+        loan_request_serializer = LoanRequestSerializer(data=loan_request_data)
+        
+        if loan_request_serializer.is_valid():
+            loan_request = loan_request_serializer.save()
+            loan_type = request_data.get('ltype')
+
+            if loan_type == 'H':
+                return self.handle_home_loan_request(loan_request, request_data)
+            elif loan_type == 'S':
+                return self.handle_student_loan_request(loan_request, request_data)
+            elif loan_type == 'P':
+                return self.handle_personal_loan_request(loan_request, request_data)
+            else:
+                return Response({'error': 'Invalid loan type'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def handle_loan_request(self, request_data):
+    #     loan_request_serializer = LoanRequestSerializer(data=request_data)
+    #     if loan_request_serializer.is_valid():
+    #         loan_request = loan_request_serializer.save()
+    #         loan_request['req_id'] = request_data.get('req_id')
+    #         loan_type = request_data.get('ltype')
+    #         if loan_type == 'H':
+    #             return self.handle_home_loan_request(loan_request, request_data)
+    #         elif loan_type == 'S':
+    #             return self.handle_student_loan_request(loan_request, request_data)
+    #         elif loan_type == 'P':
+    #             return self.handle_personal_loan_request(loan_request, request_data)
+    #         else:
+    #             return Response({'error': 'Invalid loan type'}, status=status.HTTP_400_BAD_REQUEST)
+    #     return Response(loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def handle_home_loan_request(self, loan_request, request_data):
+    #     home_loan_data = request_data.get('home_loan_request', {})
+    #     home_loan_data['req_id'] = loan_request.req_id
+    #     home_loan_request_serializer = HomeLoanRequestSerializer(data=home_loan_data)
+    #     if home_loan_request_serializer.is_valid():
+    #         home_loan_request_serializer.save()
+    #         return Response(home_loan_request_serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(home_loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def handle_home_loan_request(self, loan_request, request_data):
+        home_loan_data = request_data
+        home_loan_data['req_id'] = loan_request.req_id
+        home_loan_serializer = HomeLoanRequestSerializer(data=home_loan_data)
+
+        if home_loan_serializer.is_valid():
+            home_loan_serializer.save()
+            return Response(home_loan_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(home_loan_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def handle_student_loan_request(self, loan_request, request_data):
+        student_loan_data = request_data
+        student_loan_data['req_id'] = loan_request.req_id
+        student_loan_request_serializer = StudentLoanRequestSerializer(data=student_loan_data)
+        if student_loan_request_serializer.is_valid():
+            student_loan_request_serializer.save()
+            return Response(student_loan_request_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(student_loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def handle_personal_loan_request(self, loan_request, request_data):
+        personal_loan_data = request_data
+        personal_loan_request_serializer = PersonalLoanRequestSerializer(data=personal_loan_data)
+        if personal_loan_request_serializer.is_valid():
+            personal_loan_request_serializer.save()
+            return Response(personal_loan_request_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(personal_loan_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def handle_profile_edit_request(self, request_data, main_request):
+        profile_edit_data = request_data
+        profile_edit_data['req_id'] = main_request.req_id 
+        profile_edit_request_serializer = ProfileEditRequestSerializer(data=profile_edit_data)
+        if profile_edit_request_serializer.is_valid():
+            profile_edit_request_serializer.save()
+            return Response(profile_edit_request_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(profile_edit_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def handle_transaction_request(self, request_data, main_request):
+        transaction_request_data = request_data
+        transaction_request_data['req_id'] = main_request.req_id
+        print(transaction_request_data)
+        transaction_request_serializer = TransactionRequestSerializer(data=transaction_request_data)
+        if transaction_request_serializer.is_valid():
+            transaction_request_serializer.save()
+            return Response(transaction_request_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(transaction_request_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

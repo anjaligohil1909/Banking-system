@@ -16,5 +16,6 @@ urlpatterns = [
     path('api/loans/<customer_id>', CustomerLoansView.as_view(), name='customerLoans '),
     path('api/loans/', LoansView.as_view(), name='loansView '),
     path('api/employee/request/', RequestView.as_view(), name='request-list'),
-    path('api/customer/create_request/', CreateRequest.as_view(), name='create-request')
+    #path('api/customer/create_request/', CreateRequest.as_view(), name='create-request'),
+    path('api/create_request/', CreateRequest.as_view(), name='create_request'),
 ]

@@ -153,7 +153,7 @@ class Request(models.Model):
         return f"Request {self.req_id}"
     
 class LoanRequest(models.Model):
-    req_id = models.ForeignKey('Request', on_delete=models.CASCADE)
+    req_id = req_id = models.OneToOneField(Request, on_delete=models.CASCADE, primary_key=True)
     ltype = models.CharField(max_length=1, choices=[('S', 'Student'), ('P', 'Personal'), ('H', 'Home')])
     lamount = models.DecimalField(max_digits=9, decimal_places=3)
     lmonths = models.SmallIntegerField()
@@ -164,7 +164,7 @@ class LoanRequest(models.Model):
         return f"Loan Request {self.req_id.req_id}"
 
 class HomeLoanRequest(models.Model):
-    req_id = models.ForeignKey('LoanRequest', on_delete=models.CASCADE)
+    req_id = req_id = models.OneToOneField(LoanRequest, on_delete=models.CASCADE, primary_key=True)
     house_buildyr = models.SmallIntegerField()
     hm_ins_accno = models.CharField(max_length=12)
     yr_ins_prem = models.DecimalField(max_digits=7, decimal_places=2)
@@ -174,7 +174,7 @@ class HomeLoanRequest(models.Model):
         return f"Home Loan Request {self.req_id.req_id}"
 
 class StudentLoanRequest(models.Model):
-    req_id = models.ForeignKey('LoanRequest', on_delete=models.CASCADE)
+    req_id = req_id = models.OneToOneField(LoanRequest, on_delete=models.CASCADE, primary_key=True)
     uni_name = models.CharField(max_length=30)
     stu_id = models.CharField(max_length=12)
     slevel = models.CharField(max_length=1, choices=[('G', 'Graduate'), ('U', 'Undergraduate')])
@@ -185,12 +185,12 @@ class StudentLoanRequest(models.Model):
         return f"Student Loan Request {self.req_id.req_id}"
     
 class PersonalLoanRequest(models.Model):
-    req_id = models.ForeignKey('LoanRequest', on_delete=models.CASCADE)
+    req_id = req_id = models.OneToOneField(LoanRequest, on_delete=models.CASCADE, primary_key=True)
 
     def __str__(self):
         return f"Personal Loan Request {self.req_id.req_id}"
 class ProfileEditRequest(models.Model):
-    req_id = models.ForeignKey('Request', on_delete=models.CASCADE)
+    req_id = models.OneToOneField(Request, on_delete=models.CASCADE, primary_key=True)
     cust_fname = models.CharField(max_length=20)
     cust_lname = models.CharField(max_length=20, blank=True)
     cust_email = models.EmailField(max_length=200)
@@ -203,9 +203,9 @@ class ProfileEditRequest(models.Model):
         return f"Profile Edit Request {self.req_id.req_id}" 
 
 class TransactionRequest(models.Model):
-    req_id = models.ForeignKey('Request', on_delete=models.CASCADE)
+    req_id = models.OneToOneField(Request, on_delete=models.CASCADE, primary_key=True)
     amount = models.DecimalField(max_digits=7, decimal_places=2)
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(auto_now_add=True)
     sender_no = models.ForeignKey('Account', related_name='sent_requests', on_delete=models.CASCADE)
     receiver_no = models.ForeignKey('Account', related_name='received_requests', on_delete=models.CASCADE)
 
