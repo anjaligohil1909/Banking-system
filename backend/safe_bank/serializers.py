@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, Address, Customer, TxnList, Loan
+from .models import Account, Address, Customer, TxnList, Request, Loan, HomeLoanRequest, StudentLoanRequest, PersonalLoanRequest, ProfileEditRequest, TransactionRequest, LoanRequest
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,6 +58,15 @@ class TransactionSerializer(serializers.ModelSerializer):
             'txn_id','amount', 'datetime', 'sender_no', 'receiver_no' 
         ]
 
+class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Request
+        fields = ['req_id', 'request_type', 'status', 'created_at', 'cust_id']
+        read_only_fields = ['req_id', 'created_at', 'status']
+
+        def create(self, validated_data):
+            request = Request.objects.create(**validated_data)
+            return request
 class LoanSerializer(serializers.ModelSerializer):
     account = AccountSerializer(read_only=True)
     class Meta:
@@ -65,3 +74,44 @@ class LoanSerializer(serializers.ModelSerializer):
         #fields = ['id','lrate','lamount','lmonths','ltype','lpay','acc_no_id','account','date_open']
         depth = 1
         fields = '__all__'
+class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Request
+        fields = ['req_id', 'request_type', 'status', 'created_at', 'cust_id']
+        read_only_fields = ['req_id', 'created_at', 'status']
+
+        def create(self, validated_data):
+            request = Request.objects.create(**validated_data)
+            return request
+class LoanRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LoanRequest
+        fields = ['req_id', 'ltype', 'lamount', 'lmonths', 'lpay', 'lrate']
+
+class HomeLoanRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HomeLoanRequest
+        fields = ['req_id', 'house_buildyr', 'hm_ins_accno', 'yr_ins_prem', 'insc_id']
+
+class StudentLoanRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentLoanRequest
+        fields = ['req_id', 'uni_name', 'stu_id', 'slevel', 'smonth', 'syear']
+
+class PersonalLoanRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonalLoanRequest
+        fields = ['req_id']
+
+class ProfileEditRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileEditRequest
+        fields = ['req_id', 'cust_fname', 'cust_lname', 'cust_email', 'cust_password', 'cust_dob', 'cust_phno', 'cust_ssn']
+
+class TransactionRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransactionRequest
+        fields = ['req_id', 'amount', 'datetime', 'sender_no', 'receiver_no']
+
+
+
